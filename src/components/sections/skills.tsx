@@ -15,9 +15,9 @@ export function Skills({ locale }: { locale: Locale }) {
             <dt className="text-sm font-medium tracking-wide text-muted">
               {group.category}
             </dt>
-            <dd className="font-medium leading-relaxed">
+            <dd className="flex flex-wrap items-baseline font-medium leading-relaxed">
               {group.items.map((item, i) => (
-                <span key={item}>
+                <span key={item} className="whitespace-nowrap">
                   {item}
                   {i < group.items.length - 1 && (
                     <span aria-hidden className="mx-2 text-line">
