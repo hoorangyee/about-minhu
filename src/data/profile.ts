@@ -16,5 +16,5 @@ export const profile: Profile = {
   github: "https://github.com/hoorangyee",
   linkedin: "https://www.linkedin.com/in/민후-박-3673bb283/",
   resumeUrl: undefined,
-  siteUrl: "https://example.com", // TODO: 배포 후 실제 도메인으로 교체
+  siteUrl: "https://about-minhu.com", // TODO: 배포 후 실제 도메인으로 교체
 };
