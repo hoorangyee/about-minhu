@@ -3,13 +3,19 @@
 import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
-import { getContent } from "@/data/content";
+import { profile as profileKo } from "@/data/profile";
+import { profile as profileEn } from "@/data/en/profile";
 import { getSections } from "@/data/sections";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageToggle } from "@/components/language-toggle";
 
+/*
+ * content.ts는 projectDetails까지 포함한 로케일 전체 데이터를 한 객체로 묶습니다.
+ * Header는 클라이언트 컴포넌트라 getContent를 쓰면 그 객체 전체가 클라이언트 번들에
+ * 실리므로, 실제로 쓰는 profile만 로케일별로 직접 가져옵니다.
+ */
 export function Header({ locale }: { locale: Locale }) {
-  const { profile } = getContent(locale);
+  const profile = locale === "ko" ? profileKo : profileEn;
   const dict = ui[locale].header;
   const sections = getSections(locale);
 
