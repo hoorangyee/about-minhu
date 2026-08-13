@@ -27,19 +27,21 @@ export function DiagramView({
 }) {
   const layout = layoutDiagram(diagram);
   const titleId = `${idPrefix}-diagram-title`;
-  const descId = `${idPrefix}-diagram-desc`;
   const arrowId = `${idPrefix}-arrow`;
 
   return (
     <div className="overflow-x-auto">
+      {/*
+        caption은 figcaption으로 이미 화면에 있으므로 desc를 따로 두지 않습니다.
+        aria-labelledby에 desc까지 넣으면 같은 문장이 이름과 본문에서 두 번 읽힙니다.
+      */}
       <svg
         role="img"
-        aria-labelledby={`${titleId} ${descId}`}
+        aria-labelledby={titleId}
         viewBox={`0 0 ${layout.width} ${layout.height}`}
         className="h-auto w-full min-w-[560px]"
       >
         <title id={titleId}>{title}</title>
-        <desc id={descId}>{diagram.caption[locale]}</desc>
         <defs>
           {/* auto-start-reverse 덕분에 마커 하나로 양쪽 화살촉을 다 그립니다 */}
           <marker

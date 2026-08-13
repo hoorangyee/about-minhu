@@ -17,7 +17,7 @@ export function ProjectDetailView({
 }) {
   return (
     <div>
-      <div className="pr-10">
+      <div>
         <h3 id={titleId} className="text-xl font-bold tracking-tight">
           {project.title}
         </h3>

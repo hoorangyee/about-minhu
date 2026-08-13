@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Locale } from "@/i18n/config";
 import type { Project } from "@/types/portfolio";
 import { ui, type UiDict } from "@/i18n/ui";
@@ -7,8 +8,9 @@ import { SectionShell } from "@/components/section-shell";
 import { ProjectDialog } from "@/components/project-dialog";
 import { ProjectDetailView } from "@/components/project-detail";
 
+/* relative는 상세 버튼의 ::after가 카드 전체를 덮을 기준입니다 */
 const CARD_CLASS =
-  "mb-5 grid row-span-6 grid-rows-subgrid rounded-lg border border-line bg-surface p-6 text-left transition-colors hover:border-accent";
+  "relative mb-5 grid row-span-6 grid-rows-subgrid rounded-lg border border-line bg-surface p-6 transition-colors hover:border-accent";
 
 /*
  * subgrid로 6개 구획(제목/맥락/설명/성과/기술/링크)의 행 트랙을 옆 카드와 공유해
@@ -18,11 +20,14 @@ const CARD_CLASS =
 function CardBody({
   project,
   dict,
-  hasDetail = false,
+  titleId,
+  action,
 }: {
   project: Project;
   dict: UiDict["projects"];
-  hasDetail?: boolean;
+  titleId?: string;
+  /** 여섯째 구획에 링크 대신 들어갈 요소. 상세가 있는 카드의 트리거 버튼입니다 */
+  action?: ReactNode;
 }) {
   const links = [
     { url: project.githubUrl, label: dict.code },
@@ -33,7 +38,9 @@ function CardBody({
   return (
     <>
       <div className="flex items-baseline justify-between gap-3">
-        <h3 className="text-lg font-bold">{project.title}</h3>
+        <h3 id={titleId} className="text-lg font-bold">
+          {project.title}
+        </h3>
         {project.period && (
           <span className="shrink-0 font-mono text-xs text-muted">{project.period}</span>
         )}
@@ -47,23 +54,22 @@ function CardBody({
         {project.techStack.join(" / ")}
       </p>
       <div className="row-start-6 mt-5 flex gap-4 self-end border-t border-line pt-4 text-sm">
-        {hasDetail ? (
-          <span className="font-semibold text-accent">{dict.detail} →</span>
-        ) : links.length > 0 ? (
-          links.map((link) => (
-            <a
-              key={link.label}
-              href={link.url}
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold transition-colors hover:text-accent"
-            >
-              {link.label}
-            </a>
-          ))
-        ) : (
-          <span className="text-muted">{dict.privateNote}</span>
-        )}
+        {action ??
+          (links.length > 0 ? (
+            links.map((link) => (
+              <a
+                key={link.label}
+                href={link.url}
+                target="_blank"
+                rel="noreferrer"
+                className="font-semibold transition-colors hover:text-accent"
+              >
+                {link.label}
+              </a>
+            ))
+          ) : (
+            <span className="text-muted">{dict.privateNote}</span>
+          ))}
       </div>
     </>
   );
@@ -96,24 +102,38 @@ export function Projects({ locale }: { locale: Locale }) {
                       </article>
                     );
                   }
-                  // 모달 안 제목이 dialog의 이름이 됩니다. 카드 제목에는 id를 두지 않습니다
-                  const titleId = `project-${project.slug}-title`;
+                  const cardTitleId = `project-${project.slug}-card-title`;
+                  const dialogTitleId = `project-${project.slug}-title`;
+                  const triggerId = `project-${project.slug}-trigger`;
+                  /*
+                   * 닫힌 dialog는 display:none이라 격자 항목을 만들지 않으므로
+                   * 여섯째 구획 안에 트리거와 나란히 두어도 subgrid 정렬이 그대로입니다.
+                   */
                   return (
-                    <ProjectDialog
-                      key={project.title}
-                      triggerClassName={`${CARD_CLASS} cursor-pointer`}
-                      labelledById={titleId}
-                      closeLabel={dict.close}
-                      trigger={<CardBody project={project} dict={dict} hasDetail />}
-                    >
-                      <ProjectDetailView
+                    <article key={project.title} className={CARD_CLASS}>
+                      <CardBody
                         project={project}
-                        detail={detail}
-                        diagram={diagrams[project.slug]}
-                        locale={locale}
-                        titleId={titleId}
+                        dict={dict}
+                        titleId={cardTitleId}
+                        action={
+                          <ProjectDialog
+                            triggerId={triggerId}
+                            triggerLabel={dict.detail}
+                            triggerLabelledById={cardTitleId}
+                            labelledById={dialogTitleId}
+                            closeLabel={dict.close}
+                          >
+                            <ProjectDetailView
+                              project={project}
+                              detail={detail}
+                              diagram={diagrams[project.slug]}
+                              locale={locale}
+                              titleId={dialogTitleId}
+                            />
+                          </ProjectDialog>
+                        }
                       />
-                    </ProjectDialog>
+                    </article>
                   );
                 })}
               </div>

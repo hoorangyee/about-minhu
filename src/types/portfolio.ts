@@ -119,6 +119,6 @@ export interface Diagram {
   nodes: DiagramNode[];
   edges: DiagramEdge[];
   groups?: DiagramGroup[];
-  /** 그림 아래 설명이자 스크린리더용 desc */
+  /** 그림 아래 figcaption으로 보이는 설명 */
   caption: LocalizedText;
 }
