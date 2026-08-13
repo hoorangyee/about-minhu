@@ -176,4 +176,27 @@ export const diagrams: Record<string, Diagram> = {
       en: "On a deploy webhook it extracts issue keys from the commit range since the previous deploy, finds the Slack thread linked to each issue, and replies there. When the inputs needed to decide are missing, it stays silent rather than notify wrongly.",
     },
   },
+
+  "cashdoc-mobile": {
+    nodes: [
+      { id: "user", col: 0, row: 0, label: { ko: "이용자", en: "Consumer" }, sublabel: { ko: "상담 신청", en: "applies" } },
+      { id: "platform", col: 1, row: 0, label: { ko: "예약 플랫폼", en: "Booking platform" }, sublabel: { ko: "도메인 이벤트", en: "domain event" } },
+      { id: "inbox", col: 2, row: 0, tone: "accent", label: { ko: "알림함", en: "Notification inbox" }, sublabel: { ko: "예약+상담 통합", en: "unified" } },
+      { id: "mobile", col: 3, row: 0, tone: "accent", label: { ko: "모바일 CMS", en: "Mobile CMS" }, sublabel: { ko: "관리자 화면", en: "admin UI" } },
+      { id: "schema", col: 2, row: 1, label: { ko: "알림 스키마", en: "Inbox schema" }, sublabel: { ko: "마이그레이션", en: "migration" } },
+    ],
+    edges: [
+      { from: "user", to: "platform", label: { ko: "신청", en: "submit" } },
+      { from: "platform", to: "inbox", label: { ko: "적재", en: "records" } },
+      { from: "inbox", to: "mobile", label: { ko: "조회", en: "reads" } },
+      { from: "schema", to: "inbox", style: "dashed" },
+    ],
+    groups: [
+      { members: ["inbox", "mobile"], tone: "accent", label: { ko: "이번 작업 범위", en: "This work" } },
+    ],
+    caption: {
+      ko: "상담 신청이 들어오면 기존 도메인 이벤트에 한 갈래를 더해 알림함에 쌓습니다. 새 이벤트나 전달 경로를 만들지 않았고, 예약 알림만 담던 테이블을 확장해 두 종류를 한곳에서 다룹니다.",
+      en: "A new consultation adds one more branch to an existing domain event so it lands in the inbox. No new event or delivery path was introduced; the table that held only booking alerts was extended to carry both kinds.",
+    },
+  },
 };

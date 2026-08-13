@@ -195,4 +195,33 @@ export const projectDetails: Record<string, ProjectDetail> = {
       },
     ],
   },
+
+  "cashdoc-mobile": {
+    lead: "Built a new mobile operations screen for Cashdoc's clinic event CMS, an in-house service separate from SmartDoctor. Alongside the screens themselves, I widened a data structure across four repositories so consultation notifications, which had nowhere to land before, could join reservation alerts in the same inbox.",
+    sections: [
+      {
+        heading: "Background",
+        body: [
+          "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. The apparent goal is letting clinic admins handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC.",
+          "Getting pulled onto it came down to development moving fast enough that the scope of what I owned simply grew. One person being able to carry more than one product at once is the real backdrop for that shift.",
+        ],
+      },
+      {
+        heading: "Screens built",
+        body: [
+          "I stood up the `/mobile` route and shell, built a shared UI kit — bottom sheets, confirmation sheets, list-state components — and hung the screens off it: a home dashboard (today's tasks), a reservation list (date-range and status-chip filters, search, inline confirm) and detail view (confirm, cancel, mark visited), new-reservation creation, a consultation-applicant list and detail view (status changes, notes, SMS), a reviews-and-Q&A list with a reply screen, the notification inbox (list, read state, deep links), and the catch-all covering announcements, clinic-profile completeness, and logout — the full set a mobile operator needs.",
+          "I matched the design against a demo prototype as I built out each real screen, and added a trigger that routes mobile-device visitors straight to the mobile screens. Reservation lookups were aligned to the same filter model as the PC reservation-management screen, with counts driven off the current query results, and I worked through a run of mobile-specific rough edges: counts flickering to empty on every filter change, a horizontal scroll strip getting clipped at the screen edge, and the page starting zoomed in on first load.",
+          "I also touched the build environment to stop Vercel builds from dying with out-of-memory errors — lowering the build worker count and raising the dev server's heap limit.",
+        ],
+      },
+      {
+        heading: "Widening the notification inbox",
+        body: [
+          "The inbox only ever held reservation notifications; consultation notifications had no home on any server at all. That wasn't a screen-level bug to patch — it was a structural gap in where the data could even go — and fixing it touched four repositories.",
+          "Rather than build a new event or delivery path just for consultations, I added one more branch onto the existing `ApplicantCreated` domain event. On the storage side, I extended the table that used to hold only reservation alerts so it could carry both kinds, and enforced with a CHECK constraint that exactly one of its two foreign keys gets filled, so reservation and consultation notifications can't get mixed up.",
+          "I split the deploy into four steps, in this order: schema, then API, then frontend, then the ingestion that actually writes consultation data. The first three ship with no consultation data flowing yet, so stopping anywhere in that sequence leaves the screen behaving exactly as it did before. Only the last step, ingestion, starts writing rows into the inbox table — which means rolling back is just flipping that one switch back off.",
+        ],
+      },
+    ],
+  },
 };
