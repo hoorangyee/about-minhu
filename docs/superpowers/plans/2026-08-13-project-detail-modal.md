@@ -1116,8 +1116,10 @@ git commit -m "feat: 프로젝트 상세 모달 추가"
       { id: "ws", col: 1, row: 0, label: { ko: "WebSocket", en: "WebSocket" }, sublabel: { ko: "지수 백오프 재연결", en: "backoff reconnect" } },
       { id: "web", col: 2, row: 0, tone: "accent", label: { ko: "상담 화면", en: "Console UI" }, sublabel: { ko: "React", en: "React" } },
       { id: "api", col: 3, row: 0, tone: "accent", label: { ko: "상담 API", en: "Console API" }, sublabel: { ko: "Kotlin", en: "Kotlin" } },
-      { id: "excel", col: 0, row: 1, label: { ko: "엑셀 대량 업로드", en: "Bulk upload" } },
-      { id: "manual", col: 1, row: 1, label: { ko: "단일 등록", en: "Manual entry" } },
+      // excel·manual을 col1에 세로로 두는 이유: col0에 두면 web으로 가는 간선의
+      // 수평 구간이 col1의 상자를 관통합니다. col1↔col2 사이 빈 통로로 올려보냅니다
+      { id: "excel", col: 1, row: 1, label: { ko: "엑셀 대량 업로드", en: "Bulk upload" } },
+      { id: "manual", col: 1, row: 2, label: { ko: "단일 등록", en: "Manual entry" } },
       { id: "db", col: 3, row: 1, label: { ko: "MSSQL", en: "MSSQL" } },
     ],
     edges: [
