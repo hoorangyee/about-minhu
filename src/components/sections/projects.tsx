@@ -10,9 +10,11 @@ import { ProjectDetailView } from "@/components/project-detail";
 const CARD_CLASS =
   "mb-5 grid row-span-6 grid-rows-subgrid rounded-lg border border-line bg-surface p-6 text-left transition-colors hover:border-accent";
 
-// subgrid로 6개 구획(제목/맥락/설명/성과/기술/링크)의 행 트랙을 옆 카드와 공유해
-// 같은 행의 카드끼리 높이와 각 구획의 세로 위치가 정확히 정렬된다.
-// 따라서 이 컴포넌트는 감싸는 요소 없이 6개 구획만 내보낸다.
+/*
+ * subgrid로 6개 구획(제목/맥락/설명/성과/기술/링크)의 행 트랙을 옆 카드와 공유해
+ * 같은 행의 카드끼리 높이와 각 구획의 세로 위치가 정확히 정렬됩니다.
+ * 따라서 이 컴포넌트는 감싸는 요소 없이 6개 구획만 내보냅니다.
+ */
 function CardBody({
   project,
   dict,
@@ -94,7 +96,7 @@ export function Projects({ locale }: { locale: Locale }) {
                       </article>
                     );
                   }
-                  // 모달 안 제목이 dialog의 이름이 된다. 카드 제목에는 id를 두지 않는다
+                  // 모달 안 제목이 dialog의 이름이 됩니다. 카드 제목에는 id를 두지 않습니다
                   const titleId = `project-${project.slug}-title`;
                   return (
                     <ProjectDialog

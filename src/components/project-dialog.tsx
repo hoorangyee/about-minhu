@@ -3,8 +3,8 @@
 import { useRef, type ReactNode } from "react";
 
 /**
- * 여닫는 기계 장치만 담당한다. 내용은 서버에서 렌더링해 children으로 들어오므로
- * 클라이언트 번들에는 본문도 SVG도 포함되지 않는다.
+ * 여닫는 기계 장치만 담당합니다. 내용은 서버에서 렌더링해 children으로 들어오므로
+ * 클라이언트 번들에는 본문도 SVG도 포함되지 않습니다.
  */
 export function ProjectDialog({
   trigger,
@@ -23,7 +23,7 @@ export function ProjectDialog({
 
   function open() {
     ref.current?.showModal();
-    // showModal()이 배경 상호작용은 막지만 일부 브라우저에서 본문 스크롤은 남는다
+    // showModal()이 배경 상호작용은 막지만 일부 브라우저에서 본문 스크롤은 남습니다
     document.body.style.overflow = "hidden";
   }
 
@@ -39,7 +39,7 @@ export function ProjectDialog({
           document.body.style.overflow = "";
         }}
         onClick={(event) => {
-          // 배경을 클릭하면 이벤트 대상이 dialog 자신이다
+          // 배경을 클릭하면 이벤트 대상이 dialog 자신입니다
           if (event.target === ref.current) ref.current?.close();
         }}
         className="m-auto w-[min(46rem,calc(100vw-2rem))] max-h-[85vh] overflow-y-auto rounded-lg border border-line bg-surface p-0 text-ink"

@@ -75,8 +75,8 @@ export function DiagramView({
           </g>
         ))}
 
-        {layout.edges.map((edge) => (
-          <g key={edge.d + (edge.label?.ko ?? "")}>
+        {layout.edges.map((edge, index) => (
+          <g key={index}>
             <path
               d={edge.d}
               fill="none"

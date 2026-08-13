@@ -41,7 +41,7 @@ export const projects: Project[] = [
     techStack: ["React", "TypeScript", "Kotlin", "WebSocket", "MSSQL"],
   },
   {
-    title: "Toss payment terminal integration",
+    title: "Toss Payment Terminal Integration",
     slug: "payment-terminal",
     group: "work",
     context: "SmartDoctor · Across desktop, web, and backend",
@@ -90,7 +90,7 @@ export const projects: Project[] = [
     context: "SmartDoctor · A separate in-house service",
     period: "2026",
     description:
-      "Rebuilt the mobile screens from the ground up so clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC. Home, reservations, consultations, reviews, notifications, and settings all sit on a shared UI kit, and I connected the schema, API, frontend, and data pipeline across four repositories so new consultations land in the notification inbox automatically.",
+      "Rebuilt the mobile screens from the ground up. The apparent goal is letting clinic admins handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC. Home, reservations, consultations, reviews, notifications, and settings all sit on a shared UI kit, and I connected the schema, API, frontend, and data pipeline across four repositories so new consultations land in the notification inbox automatically.",
     impact: "Expanded my scope into development that crosses product lines",
     techStack: ["Next.js", "TypeScript", "GraphQL", "Prisma"],
   },

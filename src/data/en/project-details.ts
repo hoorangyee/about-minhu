@@ -135,7 +135,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "The data behind it",
         body: [
-          "To back the migration call with data, I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution as evidence for the decision.",
+          "I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution. The apparent intent was to use that data as evidence for the migration decision.",
         ],
       },
     ],
@@ -188,7 +188,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Keeping alerts narrow",
         body: [
-          "It started out notifying on every production deploy. I judged that notifying on routine releases too would just become noise, so I narrowed it to hotfix-style deploys only: same branch as the previous production deploy, or same service prefix and major.minor with only the patch bumped, and only when the first commit line matches hotfix formatting.",
+          "It started out notifying on every production deploy. I judged that notifying on routine releases too would likely become noise, so I narrowed it to hotfix-style deploys only: same branch as the previous production deploy, or same service prefix and major.minor with only the patch bumped, and only when the first commit line matches hotfix formatting.",
           "When it doesn't have enough information to decide, it stays silent and just logs a warning instead of sending anything. I chose silence over a wrong notification.",
           "Nobody asked me to build it, but it's still in active use on the team today.",
         ],
