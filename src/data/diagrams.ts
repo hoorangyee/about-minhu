@@ -124,4 +124,56 @@ export const diagrams: Record<string, Diagram> = {
       en: "Vendor DLLs shipped only as 32-bit blocked the migration. Confining them to a separate 32-bit process that talks to the host over IPC let the host itself move to 64-bit.",
     },
   },
+
+  "dur-integration": {
+    nodes: [
+      { id: "web", col: 0, row: 0, label: { ko: "진료 화면", en: "Clinical screen" }, sublabel: { ko: "처방·상병", en: "Rx · diagnosis" } },
+      { id: "api", col: 1, row: 0, tone: "accent", label: { ko: "DUR API", en: "DUR API" }, sublabel: { ko: "Kotlin", en: "Kotlin" } },
+      { id: "broker", col: 2, row: 0, tone: "accent", label: { ko: "연동 브로커", en: "Broker" } },
+      { id: "hira", col: 3, row: 0, label: { ko: "심평원", en: "HIRA" }, sublabel: { ko: "국가 점검 체계", en: "national registry" } },
+      // cli를 col0·row1에 두는 이유: api로 가는 간선의 수직 구간이 col0·col1 사이
+      // 빈 통로를 지나며, 이 통로는 accent 그룹(api·broker) 경계 바깥이라 관통하지 않습니다
+      { id: "cli", col: 0, row: 1, tone: "accent", label: { ko: "검증 CLI", en: "Verification CLI" }, sublabel: { ko: "케이스 기반", en: "case-driven" } },
+      { id: "master", col: 1, row: 1, label: { ko: "기준 DB", en: "Reference DB" }, sublabel: { ko: "병용금기 목록", en: "interaction data" } },
+    ],
+    edges: [
+      { from: "web", to: "api", label: { ko: "점검 요청", en: "check" } },
+      { from: "api", to: "broker" },
+      { from: "broker", to: "hira", dir: "both" },
+      { from: "master", to: "api", label: { ko: "적재", en: "loads" } },
+      { from: "cli", to: "api", style: "dashed", label: { ko: "회귀 검증", en: "regression" } },
+    ],
+    groups: [
+      { members: ["api", "broker"], tone: "accent", label: { ko: "직접 구축", en: "Built by me" } },
+    ],
+    caption: {
+      ko: "처방과 상병을 심평원 점검 체계에 보내 병용금기 등을 확인합니다. 외부 연동은 눈으로 확인하기 어려워, 같은 호출 경로를 재현해 기대값과 대조하는 검증 도구를 따로 만들었습니다.",
+      en: "Prescriptions and diagnoses are checked against the national drug-safety registry. Since external integrations are hard to eyeball, I built a separate tool that replays the same call path and compares against expected results.",
+    },
+  },
+
+  "deploy-notifier": {
+    nodes: [
+      { id: "deploy", col: 0, row: 0, label: { ko: "배포 플랫폼", en: "Deploy platform" }, sublabel: { ko: "웹훅", en: "webhook" } },
+      { id: "relay", col: 1, row: 0, tone: "accent", label: { ko: "알림 릴레이", en: "Notifier" }, sublabel: { ko: "핫픽스 판별", en: "hotfix filter" } },
+      // git·jira·slack을 col2에 세로로 쌓는 이유: 가로로 펼치면 relay에서 뒤쪽 상자로 가는
+      // 간선이 앞쪽 상자를 관통합니다. col1·col2 사이 빈 통로로 세 간선 모두 수직 우회시킵니다
+      { id: "git", col: 2, row: 0, label: { ko: "커밋 범위 조회", en: "Commit range" } },
+      { id: "jira", col: 2, row: 1, label: { ko: "이슈 스레드 링크", en: "Issue thread link" } },
+      { id: "slack", col: 2, row: 2, label: { ko: "Slack 스레드", en: "Slack thread" }, sublabel: { ko: "완료 답글", en: "reply" } },
+    ],
+    edges: [
+      { from: "deploy", to: "relay", label: { ko: "배포 이벤트", en: "deploy event" } },
+      { from: "relay", to: "git", dir: "both" },
+      { from: "relay", to: "jira", dir: "both" },
+      { from: "relay", to: "slack" },
+    ],
+    groups: [
+      { members: ["git", "jira", "slack"], label: { ko: "조회·전달 대상", en: "Lookups and delivery" } },
+    ],
+    caption: {
+      ko: "배포 웹훅을 받으면 직전 배포와의 커밋 범위에서 이슈 키를 뽑고, 그 이슈에 연결된 Slack 스레드를 찾아 배포 완료를 답글로 남깁니다. 판별에 필요한 정보가 없으면 잘못 알리는 대신 침묵합니다.",
+      en: "On a deploy webhook it extracts issue keys from the commit range since the previous deploy, finds the Slack thread linked to each issue, and replies there. When the inputs needed to decide are missing, it stays silent rather than notify wrongly.",
+    },
+  },
 };

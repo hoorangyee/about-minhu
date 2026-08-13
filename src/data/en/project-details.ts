@@ -140,4 +140,59 @@ export const projectDetails: Record<string, ProjectDetail> = {
       },
     ],
   },
+
+  "dur-integration": {
+    lead: "Building the reservation-info panel's new 'record entry' tab included DUR — Korea's HIRA drug-utilization review — integration end to end, from the web popup through the backend broker. Since it's an external integration that's hard to eyeball, I also built a separate CLI that replays the call path and auto-checks responses against declared cases.",
+    sections: [
+      {
+        heading: "Background",
+        body: [
+          "The reservation-info panel's new 'record entry' tab brought prescription and diagnosis entry together with the rest of the existing EMR feature set, and DUR integration came along as a natural part of building it — HIRA's (Health Insurance Review & Assessment Service) drug-utilization review, which flags interactions and duplicate prescriptions. There was no separate HIRA certification or review process involved; it was a fresh integration built from scratch.",
+        ],
+      },
+      {
+        heading: "What I built",
+        body: [
+          "On the web I built a new DUR check popup slice: issue a confirmation number, then run the check, as two calls. Results render in a table, reasons can be entered and sent in bulk, and the whole thing is wired into the save gate — when nothing is flagged, saving proceeds with no popup at all.",
+          "On the backend I built the broker connection to HIRA from scratch. I moved a hardcoded 38-character auth code to a dynamic database lookup, implemented every check type that can appear on a prescription, and unified the outgoing message format. Interaction checks run against a master database loaded from S3 (SQLite packed in a zip), and daily maximum dosage for capacity-warning items is normalized to active-ingredient milligrams. I added a check-cancellation endpoint and made the reference database's version follow whatever version was actually loaded, instead of a fixed value.",
+          "In the following quarter I kept following up on it. Deleting a record now also triggers DUR cancellation, so the HIRA-side check entry doesn't linger. I added a resubmit path for check response codes 53004 through 53008, aligned the invariant that the DUR confirmation number and the outside-prescription issuance number must match with how NC (the in-house EMR) handles it, and fixed an infinite loop in issuance-number generation caused by a date-max lookup that didn't match its own LIKE condition. Daily dosage now accepts fractional values, and I removed a spot where a single dose was being split and calculated twice.",
+        ],
+      },
+      {
+        heading: "Why a separate verification tool",
+        body: [
+          "DUR checks are a real call to a HIRA server and back, so looking at the screen alone couldn't tell me whether a given response was actually correct.",
+          "So I built a separate CLI, dur-conformance, in its own repo. It replays the same confirmation-number and check calls the CRM makes, and cases declared in YAML get run through a loader and runner that compares each response against expected values and produces a report. It isn't wired into CI — I used it as a one-off verification tool whenever I touched the integration in a meaningful way.",
+        ],
+      },
+    ],
+  },
+
+  "deploy-notifier": {
+    lead: "A tool I built on my own, unasked, to remove the need for everyone to individually check whether a production deploy actually went out. It pulls the commit range from a deploy webhook, finds the Slack thread tied to each issue, and replies there — narrowed down to hotfixes only, and still in active use today.",
+    sections: [
+      {
+        heading: "Background",
+        body: [
+          "An internal tool to cut down on people individually checking whether a production deploy went out. Nobody asked for it — I built it because I felt the need myself. The core behavior is simple: pull issue keys out of the commits in a deploy's range, find the Slack thread linked to each issue, and reply there once the deploy completes.",
+        ],
+      },
+      {
+        heading: "What I built",
+        body: [
+          "I built the Vercel webhook entry point with signature verification and async processing, a client that looks up the previous production deploy and pulls the commit range through the GitHub compare API (handling pagination and response truncation), a Jira thread lookup paired with a Slack archive-link parser, and the orchestration that ties it all together, checking for an existing reply before posting one.",
+          "Redeploys of the same SHA are skipped, and commit file lookups run in parallel. I covered edge cases with tests: staying at 200 on a malformed webhook body, returning 401 when the secret isn't configured.",
+          "On July 15 I widened the target projects to five, including the call-center console, the daily ledger, and the wait-status board, rotated the webhook secret, and cut over. I also wrote design-spec docs, a script that replays real payloads for verification, and a DRY_RUN mode.",
+        ],
+      },
+      {
+        heading: "Keeping alerts narrow",
+        body: [
+          "It started out notifying on every production deploy. I judged that notifying on routine releases too would just become noise, so I narrowed it to hotfix-style deploys only: same branch as the previous production deploy, or same service prefix and major.minor with only the patch bumped, and only when the first commit line matches hotfix formatting.",
+          "When it doesn't have enough information to decide, it stays silent and just logs a warning instead of sending anything. I chose silence over a wrong notification.",
+          "Nobody asked me to build it, but it's still in active use on the team today.",
+        ],
+      },
+    ],
+  },
 };
