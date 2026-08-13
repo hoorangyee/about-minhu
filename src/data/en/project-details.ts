@@ -7,8 +7,8 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Background",
         body: [
-          "The desktop CRM is what clinic front-desk and consultation staff use every day, and changing or adding a screen meant touching C#/WPF code and redeploying an installer. That made it hard to keep up with hospital-specific requests at any real speed.",
-          "So a long-running migration began: embed a WebView2 host inside the desktop CRM and move screens to the web one at a time, rather than rewriting the whole desktop app at once. Each screen could go live as soon as its port was done, instead of waiting on one big release.",
+          "The desktop CRM is a C#/WPF application used every day by clinic front-desk and consultation staff. Migrating its core screens to the web has been running since 2025 and is still underway, starting as a desktop-and-web effort before growing to include the backend API codebase as well.",
+          "The approach was to embed a WebView2 host inside the desktop CRM and move screens to the web one at a time, rather than rewriting the whole desktop app at once. Each screen could go live as soon as its port was done, instead of waiting on one big release.",
         ],
       },
       {
