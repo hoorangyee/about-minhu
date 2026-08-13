@@ -10,7 +10,14 @@ export const NODE_H = 56;
 export const COL_GAP = 64;
 export const ROW_GAP = 40;
 export const GROUP_PAD = 14;
-export const MARGIN = 24;
+/**
+ * 상단 여백은 diagram.tsx가 그룹 박스 위에 그리는 그룹 라벨을 가릴 만큼 커야 합니다.
+ * 라벨은 `group.y - 6`을 베이스라인으로 그려지고, 그룹 박스 상단은 노드 y에서 GROUP_PAD만큼
+ * 뺀 값입니다. 한글 10.5px 텍스트의 어센트가 대략 8~9px이므로 MARGIN이 GROUP_PAD와
+ * 라벨 어센트를 합친 값보다 작으면 행 0에 있는 그룹의 라벨 위쪽이 SVG viewBox 밖으로
+ * 잘립니다. 이 값을 줄이기 전에 위 계산을 다시 확인해 주세요.
+ */
+export const MARGIN = 36;
 
 export interface Box {
   x: number;
