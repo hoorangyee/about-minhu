@@ -202,7 +202,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Background",
         body: [
-          "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. Clinic admins can now handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — from a phone, without being at a PC.",
+          "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. Clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — from a phone, without being at a PC.",
           "Getting pulled onto it came down to development moving fast enough that the scope of what I owned simply grew. One person being able to carry more than one product at once is the real backdrop for that shift.",
         ],
       },
