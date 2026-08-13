@@ -29,12 +29,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
   },
 
   "clinical-record-screen": {
-    lead: "Built a new clinical records screen inside the reservation-info panel, covering diagnosis and prescription entry through fee calculation and saving. It was the largest single module of the quarter.",
+    lead: "Built a new clinical records screen inside the reservation-info panel, covering diagnosis and prescription entry through fee calculation and saving. It was the largest single module I owned in the migration.",
     sections: [
       {
         heading: "Background",
         body: [
-          "Inside the reservation-info panel sits the record-entry screen: diagnosis codes and prescriptions, consultation-fee and exam-fee calculation, treatment-pass usage, and saving the record itself. Rebuilding this screen on the web was, by ticket count, the largest project of the quarter, with roughly 60 related tickets.",
+          "Inside the reservation-info panel sits the record-entry screen: diagnosis codes and prescriptions, consultation-fee and exam-fee calculation, treatment-pass usage, and saving the record itself. Rebuilding this screen on the web was, by ticket count, the largest project I took on — roughly 60 related tickets in a single quarter.",
           "Because the screen deals directly with prescriptions and diagnoses, integrating DUR — Korea's HIRA drug-utilization review — came along naturally while building it. The check runs as two calls: issue a confirmation number, then run the review. When nothing is flagged, saving proceeds without a popup; when something is flagged, the check result surfaces first. I wired this into the save gate.",
         ],
       },
@@ -44,7 +44,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
           "I built several input-assist features around diagnosis and prescription entry. Prescription-code autocomplete debounces input and sorts search results, and shows group-order and treatment-pass status through icons and tooltips. Entering a duplicate diagnosis code triggers a warning, and deleting a code also clears its fee assignment.",
           "The save pipeline consolidates onto a single save API and chains into payment completion once a save succeeds. Consultation and symptom notes save as RTF.",
           "Since the screen runs inside a desktop webview, I also handled the embedding: passing customer and reservation IDs as query parameters, syncing the URL when the customer changes, optimizing WebView2 memory usage, and gating exposure behind a QA-only flag for a staged rollout.",
-          "In March I worked through roughly 30 tickets against this screen in a focused QA round — scrolling, layout, tooltip, and focus issues, plus marking records saved from NC (the in-house EMR) as read-only. Later QA rounds covered insurance-change handling, missing exam fees, blocking zero-amount payments on already-completed records, and auto-filling group-order prescription attributes and statement notes.",
+          "In March 2026 I worked through roughly 30 tickets against this screen in a focused QA round — scrolling, layout, tooltip, and focus issues, plus marking records saved from NC (the in-house EMR) as read-only. Later QA rounds covered insurance-change handling, missing exam fees, blocking zero-amount payments on already-completed records, and auto-filling group-order prescription attributes and statement notes.",
         ],
       },
       {
@@ -63,8 +63,8 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Background",
         body: [
-          "A new web module for managing marketing leads and inbound-call consultations at a clinic's call center. Field feedback from a large plastic-surgery clinic running its own call center kept arriving as tickets, and the module went through short cycles of intake, build, and on-site verification. By the end of the quarter it was live at that one clinic, handling roughly 480 leads and calls a day.",
-          "Telephony runs over a local WebSocket to the 'MediCall' CTI middleware, with exponential backoff on reconnect. For this module I also built the backend API (the hospital module) myself, not just the frontend.",
+          "A new web module for managing marketing leads and inbound-call consultations at a clinic's call center. Field feedback from a large plastic-surgery clinic running its own call center kept arriving as tickets, and the module went through short cycles of intake, build, and on-site verification. Early on it was live at that one clinic, handling roughly 480 leads and calls a day.",
+          "Telephony runs over a local WebSocket to the 'MediCall' CTI middleware, with exponential backoff on reconnect. For this module I also built the backend API myself, not just the frontend.",
         ],
       },
       {
@@ -79,7 +79,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "What broke in the field",
         body: [
           "A race condition let a single inbound call spawn two leads, and consultation drafts in progress would disappear if the call dropped mid-conversation. I fixed both as part of stabilizing the inbound-call path.",
-          "Later, in July, I removed an N+1 pattern where the lead-source dropdown queried its options once per row, replacing it with a single batch endpoint for the whole list.",
+          "Later, in July 2026, I removed an N+1 pattern where the lead-source dropdown queried its options once per row, replacing it with a single batch endpoint for the whole list.",
         ],
       },
     ],
@@ -92,16 +92,16 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "Background",
         body: [
           "This was an epic to wire a Toss payment terminal (their Front Plugin) into the CRM's checkout flow. The backend payment-session infrastructure already existed; I owned both the desktop CRM (.NET 6, WPF) and web client integrations, plus backend stabilization. The integration came about because Toss reached out about a partnership: pairing the terminal with MediCash, the company's own point-based payment service, to supply more Toss terminals to hospitals.",
-          "In the following quarter I kept fixing balance-consistency issues that surfaced whenever MediCash points and Toss payments mixed, and reworked the pairing screens and settings after the integration moved from leader mode to client mode. As of August it's still pending production rollout.",
+          "Afterward I kept fixing balance-consistency issues that surfaced whenever MediCash points and Toss payments mixed, and reworked the pairing screens and settings after the integration moved from leader mode to client mode. As of August 2026 it's still pending production rollout.",
         ],
       },
       {
         heading: "What I built",
         body: [
           "On the desktop CRM I built a WebSocket client with automatic reconnect and a single connection per app, implemented the Toss session and refund services, and wired them into the checkout screen — about 65 commits on a single ticket.",
-          "On the web side (apps/crm) I built the payment slice itself: a Zustand session state machine, a retry queue, and the WebSocket hooks around them.",
+          "On the web side I built the payment slice itself: a Zustand session state machine, a retry queue, and the WebSocket hooks around them.",
           "On the backend I stabilized the failure and cancellation paths: sending session.abort to the plugin on cancel or failure so the terminal screen wouldn't get stuck, hardening the watchdogs that catch a dropped connection, and re-establishing the security context on the WebSocket handler.",
-          "In the following quarter I worked through a chain of MediCash consistency bugs in order: the quick-checkout discount summary not updating when points were applied mid-session, balances left sitting in pending payment by the point amount even after payment completed, stale balances reappearing when a prescription reloaded, and usage not showing up on screen for records created without a reservation. When the integration moved from leader mode to client mode, I built a new device pairing screen — issuing codes, listing devices, deregistering them — and removed the old terminal settings UI from preferences.",
+          "Later I worked through a chain of MediCash consistency bugs in order: the quick-checkout discount summary not updating when points were applied mid-session, balances left sitting in pending payment by the point amount even after payment completed, stale balances reappearing when a prescription reloaded, and usage not showing up on screen for records created without a reservation. When the integration moved from leader mode to client mode, I built a new device pairing screen — issuing codes, listing devices, deregistering them — and removed the old terminal settings UI from preferences.",
         ],
       },
       {
@@ -135,7 +135,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "The data behind it",
         body: [
-          "I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution. The apparent intent was to use that data as evidence for the migration decision.",
+          "I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution.",
         ],
       },
     ],
@@ -155,7 +155,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
         body: [
           "On the web I built a new DUR check popup slice: issue a confirmation number, then run the check, as two calls. Results render in a table, reasons can be entered and sent in bulk, and the whole thing is wired into the save gate — when nothing is flagged, saving proceeds with no popup at all.",
           "On the backend I built the broker connection to HIRA from scratch. I moved a hardcoded 38-character auth code to a dynamic database lookup, implemented every check type that can appear on a prescription, and unified the outgoing message format. Interaction checks run against a master database loaded from S3 (SQLite packed in a zip), and daily maximum dosage for capacity-warning items is normalized to active-ingredient milligrams. I added a check-cancellation endpoint and made the reference database's version follow whatever version was actually loaded, instead of a fixed value.",
-          "In the following quarter I kept following up on it. Deleting a record now also triggers DUR cancellation, so the HIRA-side check entry doesn't linger. I added a resubmit path for check response codes 53004 through 53008, aligned the invariant that the DUR confirmation number and the outside-prescription issuance number must match with how NC (the in-house EMR) handles it, and fixed an infinite loop in issuance-number generation caused by a date-max lookup that didn't match its own LIKE condition. Daily dosage now accepts fractional values, and I removed a spot where a single dose was being split and calculated twice.",
+          "I kept following up on it afterward. Deleting a record now also triggers DUR cancellation, so the HIRA-side check entry doesn't linger. I added a resubmit path for check response codes 53004 through 53008, aligned the invariant that the DUR confirmation number and the outside-prescription issuance number must match with how NC (the in-house EMR) handles it, and fixed an infinite loop in issuance-number generation caused by a date-max lookup that didn't match its own LIKE condition. Daily dosage now accepts fractional values, and I removed a spot where a single dose was being split and calculated twice.",
         ],
       },
       {
@@ -182,7 +182,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
         body: [
           "I built the Vercel webhook entry point with signature verification and async processing, a client that looks up the previous production deploy and pulls the commit range through the GitHub compare API (handling pagination and response truncation), a Jira thread lookup paired with a Slack archive-link parser, and the orchestration that ties it all together, checking for an existing reply before posting one.",
           "Redeploys of the same SHA are skipped, and commit file lookups run in parallel. I covered edge cases with tests: staying at 200 on a malformed webhook body, returning 401 when the secret isn't configured.",
-          "On July 15 I widened the target projects to five, including the call-center console, the daily ledger, and the wait-status board, rotated the webhook secret, and cut over. I also wrote design-spec docs, a script that replays real payloads for verification, and a DRY_RUN mode.",
+          "On July 15, 2026 I widened the target projects to five, including the call-center console and the wait-status board, rotated the webhook secret, and cut over. I also wrote design-spec docs, a script that replays real payloads for verification, and a DRY_RUN mode.",
         ],
       },
       {
@@ -202,7 +202,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Background",
         body: [
-          "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. The apparent goal is letting clinic admins handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC.",
+          "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. Clinic admins can now handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — from a phone, without being at a PC.",
           "Getting pulled onto it came down to development moving fast enough that the scope of what I owned simply grew. One person being able to carry more than one product at once is the real backdrop for that shift.",
         ],
       },

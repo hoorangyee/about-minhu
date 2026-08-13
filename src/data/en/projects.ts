@@ -79,7 +79,7 @@ export const projects: Project[] = [
     context: "SmartDoctor · Built and operated on my own initiative",
     period: "2026",
     description:
-      "An internal tool that ended the need for everyone to manually check whether a production hotfix actually shipped. It listens for deploy webhooks, diffs the commit range against the previous deploy, and posts a completion reply on the Slack thread linked to whatever Jira issue keys show up in those commits. Notifying on regular releases too would just be noise, so it picks out hotfix-shaped deploys only, and when it doesn't have enough information to tell, it stays silent and logs a warning rather than risk a false report.",
+      "An internal tool built to cut down on everyone individually checking whether a production hotfix actually shipped. It listens for deploy webhooks, diffs the commit range against the previous deploy, and posts a completion reply on the Slack thread linked to whatever Jira issue keys show up in those commits. I judged that notifying on regular releases too would likely become noise, so it picks out hotfix-shaped deploys only, and when it doesn't have enough information to tell, it stays silent and logs a warning rather than risk a false report.",
     impact: "Built without being asked, and now a fixture of how the team operates",
     techStack: ["TypeScript", "Vercel Functions", "Slack API", "Jira API"],
   },
@@ -90,7 +90,7 @@ export const projects: Project[] = [
     context: "SmartDoctor · A separate in-house service",
     period: "2026",
     description:
-      "Rebuilt the mobile screens from the ground up. The apparent goal is letting clinic admins handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC. Home, reservations, consultations, reviews, notifications, and settings all sit on a shared UI kit, and I connected the schema, API, frontend, and data pipeline across four repositories so new consultations land in the notification inbox automatically.",
+      "Rebuilt the mobile screens from the ground up so clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC. Home, reservations, consultations, reviews, notifications, and settings all sit on a shared UI kit, and I connected the schema, API, frontend, and data pipeline across four repositories so new consultations land in the notification inbox automatically.",
     impact: "Expanded my scope into development that crosses product lines",
     techStack: ["Next.js", "TypeScript", "GraphQL", "Prisma"],
   },
