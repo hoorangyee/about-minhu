@@ -9,6 +9,7 @@ const linksOf = (title: string) => {
 export const projects: Project[] = [
   {
     title: "Desktop-to-Web CRM Migration",
+    slug: "crm-web-migration",
     group: "work",
     context: "SmartDoctor · Module design & implementation, plus the runtime foundation",
     period: "2025 — Present",
@@ -19,6 +20,7 @@ export const projects: Project[] = [
   },
   {
     title: "Clinical Records Screen",
+    slug: "clinical-record-screen",
     group: "work",
     context: "SmartDoctor · The largest module in the web migration",
     period: "2026",
@@ -29,6 +31,7 @@ export const projects: Project[] = [
   },
   {
     title: "Call Center Consultation Management",
+    slug: "call-center-crm",
     group: "work",
     context: "SmartDoctor · Frontend and backend API together",
     period: "2026",
@@ -38,17 +41,19 @@ export const projects: Project[] = [
     techStack: ["React", "TypeScript", "Kotlin", "WebSocket", "MSSQL"],
   },
   {
-    title: "Payment Terminal Integration",
+    title: "Toss payment terminal integration",
+    slug: "payment-terminal",
     group: "work",
     context: "SmartDoctor · Across desktop, web, and backend",
     period: "2026",
     description:
-      "Integrated external payment terminals into the CRM checkout flow. Built a WebSocket client with automatic reconnection for the desktop (.NET) and a payment-session state machine for the web, and solved the multi-pod failure — where the payment plugin and the CRM connected to different pods and couldn't find each other — by replacing the in-memory session registry with a Kafka fan-out relay.",
+      "Integrated Toss payment terminals into the CRM checkout flow. Built a WebSocket client with automatic reconnection for the desktop (.NET) and a payment-session state machine for the web, and solved the multi-pod failure — where the payment plugin and the CRM connected to different pods and couldn't find each other — by replacing the in-memory session registry with a Kafka fan-out relay.",
     impact: "Proposed and designed the session routing for multi-pod environments",
     techStack: ["Kafka", "WebSocket", "C#", "React", "Zustand"],
   },
   {
     title: "64-bit Migration of the Desktop CRM",
+    slug: "desktop-x64",
     group: "work",
     context: "SmartDoctor · Proposed and led",
     period: "2025",
@@ -59,12 +64,35 @@ export const projects: Project[] = [
   },
   {
     title: "DUR (Drug Safety Review) Integration & Verification Tool",
+    slug: "dur-integration",
     group: "work",
     context: "SmartDoctor · Web + backend, plus a purpose-built verification CLI",
     period: "2026",
     description:
       "Built the drug-utilization-review flow that checks prescriptions and diagnoses against HIRA (Korea's health-insurance review agency), from the web popup to the backend broker integration. Implemented every check type for prescriptions and wrote a case-based (YAML) CLI tool that regression-verifies the integration's correctness.",
     techStack: ["Kotlin", "React", "AWS S3", "SQLite"],
+  },
+  {
+    title: "Deploy Notification Relay",
+    slug: "deploy-notifier",
+    group: "work",
+    context: "SmartDoctor · Built and operated on my own initiative",
+    period: "2026",
+    description:
+      "An internal tool that ended the need for everyone to manually check whether a production hotfix actually shipped. It listens for deploy webhooks, diffs the commit range against the previous deploy, and posts a completion reply on the Slack thread linked to whatever Jira issue keys show up in those commits. Notifying on regular releases too would just be noise, so it picks out hotfix-shaped deploys only, and when it doesn't have enough information to tell, it stays silent and logs a warning rather than risk a false report.",
+    impact: "Built without being asked, and now a fixture of how the team operates",
+    techStack: ["TypeScript", "Vercel Functions", "Slack API", "Jira API"],
+  },
+  {
+    title: "Cashdoc Clinic CMS Mobile Screens",
+    slug: "cashdoc-mobile",
+    group: "work",
+    context: "SmartDoctor · A separate in-house service",
+    period: "2026",
+    description:
+      "Rebuilt the mobile screens from the ground up so clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC. Home, reservations, consultations, reviews, notifications, and settings all sit on a shared UI kit, and I connected the schema, API, frontend, and data pipeline across four repositories so new consultations land in the notification inbox automatically.",
+    impact: "Expanded my scope into development that crosses product lines",
+    techStack: ["Next.js", "TypeScript", "GraphQL", "Prisma"],
   },
   {
     title: "LRAGE — Legal-Domain RAG Evaluation Toolkit",

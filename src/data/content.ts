@@ -4,11 +4,13 @@ import { skills as skillsKo } from "@/data/skills";
 import { experiences as experiencesKo } from "@/data/experience";
 import { projects as projectsKo } from "@/data/projects";
 import { educations as educationsKo } from "@/data/education";
+import { projectDetails as projectDetailsKo } from "@/data/project-details";
 import { profile as profileEn } from "@/data/en/profile";
 import { skills as skillsEn } from "@/data/en/skills";
 import { experiences as experiencesEn } from "@/data/en/experience";
 import { projects as projectsEn } from "@/data/en/projects";
 import { educations as educationsEn } from "@/data/en/education";
+import { projectDetails as projectDetailsEn } from "@/data/en/project-details";
 
 const content = {
   ko: {
@@ -17,6 +19,7 @@ const content = {
     experiences: experiencesKo,
     projects: projectsKo,
     educations: educationsKo,
+    projectDetails: projectDetailsKo,
   },
   en: {
     profile: profileEn,
@@ -24,6 +27,7 @@ const content = {
     experiences: experiencesEn,
     projects: projectsEn,
     educations: educationsEn,
+    projectDetails: projectDetailsEn,
   },
 } as const;
 

@@ -6,7 +6,7 @@ export const experiences: Experience[] = [
     role: "Software Engineer — Clinic CRM",
     period: "Aug 2024 — Present",
     highlights: [
-      "Started with maintenance and feature work on the desktop CRM (C#/WPF), designed and built my modules in the web migration (React), and now develop the backend APIs (Kotlin/Spring) directly — about 735 Jira tickets and 772 merged PRs over two years",
+      "Started with maintenance and feature work on the desktop CRM (C#/WPF), designed and built my modules in the web migration (React), and now develop the backend APIs (Kotlin/Spring) directly — about 849 Jira tickets and 941 merged PRs over two years",
       "Owned the monthly reservation calendar, the clinical records screen (the largest module at ~60 tickets in a quarter), and a treatment history tool in the web migration, and improved query performance by splitting month-wide fetches into per-week cached requests",
       "Rebuilt the desktop refresh flow that re-fetched everything on a single reservation change into single-item updates, and proposed and led replacing the embedded browser (CefSharp → WebView2)",
       "Ported three desktop-only screens with an 'add API → standalone web app → webview embed' pattern — cross-stack development across the web, API, and desktop codebases",

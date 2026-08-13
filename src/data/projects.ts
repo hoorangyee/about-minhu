@@ -3,6 +3,7 @@ import type { Project } from "@/types/portfolio";
 export const projects: Project[] = [
   {
     title: "데스크톱 → 웹 CRM 전환",
+    slug: "crm-web-migration",
     group: "work",
     context: "스마트닥터 · 담당 모듈 설계·구현, 실행 기반까지",
     period: "2025 — 현재",
@@ -13,6 +14,7 @@ export const projects: Project[] = [
   },
   {
     title: "진료 기록 화면 신규 구축",
+    slug: "clinical-record-screen",
     group: "work",
     context: "스마트닥터 · 웹 전환 최대 모듈",
     period: "2026",
@@ -23,6 +25,7 @@ export const projects: Project[] = [
   },
   {
     title: "콜센터 상담 관리 시스템",
+    slug: "call-center-crm",
     group: "work",
     context: "스마트닥터 · 프론트엔드와 백엔드 API를 함께 개발",
     period: "2026",
@@ -32,17 +35,19 @@ export const projects: Project[] = [
     techStack: ["React", "TypeScript", "Kotlin", "WebSocket", "MSSQL"],
   },
   {
-    title: "결제 단말 연동",
+    title: "토스 결제 단말 연동",
+    slug: "payment-terminal",
     group: "work",
     context: "스마트닥터 · 데스크톱·웹·백엔드에 걸친 연동",
     period: "2026",
     description:
-      "CRM 수납 흐름에 외부 결제 단말을 연동했습니다. 데스크톱(.NET)에는 자동 재연결을 갖춘 WebSocket 클라이언트를, 웹에는 결제 세션 상태머신을 구현했고, 결제 플러그인과 CRM이 서로 다른 파드에 붙으면 단말을 찾지 못하던 인메모리 세션 레지스트리의 한계를 Kafka fan-out 릴레이 구조로 해결했습니다.",
+      "CRM 수납 흐름에 토스 결제 단말을 연동했습니다. 데스크톱(.NET)에는 자동 재연결을 갖춘 WebSocket 클라이언트를, 웹에는 결제 세션 상태머신을 구현했고, 결제 플러그인과 CRM이 서로 다른 파드에 붙으면 단말을 찾지 못하던 인메모리 세션 레지스트리의 한계를 Kafka fan-out 릴레이 구조로 해결했습니다.",
     impact: "멀티 파드 환경의 결제 세션 라우팅 구조를 직접 제안·설계",
     techStack: ["Kafka", "WebSocket", "C#", "React", "Zustand"],
   },
   {
     title: "데스크톱 CRM 64비트 전환",
+    slug: "desktop-x64",
     group: "work",
     context: "스마트닥터 · 직접 제안하고 주도",
     period: "2025",
@@ -53,12 +58,35 @@ export const projects: Project[] = [
   },
   {
     title: "DUR(의약품 안전 점검) 연동과 검증 도구",
+    slug: "dur-integration",
     group: "work",
     context: "스마트닥터 · 웹·백엔드 연동 + 자체 검증 CLI",
     period: "2026",
     description:
       "진료 화면에서 처방·상병 정보로 심평원(HIRA)의 의약품 안전 점검을 수행하는 기능을 웹 팝업부터 백엔드 브로커 연동까지 구축했습니다. 처방전 내 모든 점검 종류를 구현하고, 점검 응답을 케이스(YAML) 기반으로 자동 검증하는 CLI 도구를 직접 만들어 외부 연동의 정확성을 회귀 검증할 수 있게 했습니다.",
     techStack: ["Kotlin", "React", "AWS S3", "SQLite"],
+  },
+  {
+    title: "배포 알림 릴레이",
+    slug: "deploy-notifier",
+    group: "work",
+    context: "스마트닥터 · 필요를 느껴 직접 만들고 운영",
+    period: "2026",
+    description:
+      "상용 핫픽스가 실제로 나갔는지를 각자 확인해야 하던 상황을 없앤 사내 도구. 배포 웹훅을 받아 직전 배포와의 커밋 범위를 비교하고, 거기 담긴 이슈 키로 Jira에 연결된 Slack 스레드를 찾아 배포 완료를 답글로 남깁니다. 정기 릴리즈까지 알리면 소음이 되므로 핫픽스성 배포만 골라내며, 판별에 필요한 정보가 없으면 잘못 알리는 대신 침묵하고 경고 로그만 남깁니다.",
+    impact: "요청받지 않고 만들어 팀 운영에 정착",
+    techStack: ["TypeScript", "Vercel Functions", "Slack API", "Jira API"],
+  },
+  {
+    title: "캐시닥 병원 CMS 모바일 화면",
+    slug: "cashdoc-mobile",
+    group: "work",
+    context: "스마트닥터 · 사내 별도 서비스",
+    period: "2026",
+    description:
+      "병원 관리자가 PC 앞에 없어도 예약 확정, 상담 응대, 후기 답변 같은 일상 운영을 처리할 수 있도록 모바일 화면 전체를 새로 만들었습니다. 홈·예약·상담·후기·알림함·설정을 공용 UI 킷 위에 올렸고, 신규 상담이 들어오면 알림함에 쌓이도록 스키마·API·프런트·적재를 네 개 저장소에 걸쳐 연결했습니다.",
+    impact: "제품군을 넘나드는 개발까지 담당 범위 확장",
+    techStack: ["Next.js", "TypeScript", "GraphQL", "Prisma"],
   },
   {
     title: "LRAGE — 법률 도메인 RAG 평가 툴킷",

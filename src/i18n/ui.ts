@@ -23,6 +23,8 @@ export const ui = {
       demo: "데모 ↗",
       paper: "논문 ↗",
       privateNote: "사내 프로젝트 · 코드 비공개",
+      detail: "자세히 보기",
+      close: "닫기",
     },
     contact: {
       blurb: "커피챗, 채용 제안, 협업 제안 모두 환영합니다.",
@@ -59,6 +61,8 @@ export const ui = {
       demo: "Demo ↗",
       paper: "Paper ↗",
       privateNote: "Proprietary — code not public",
+      detail: "View details",
+      close: "Close",
     },
     contact: {
       blurb: "Coffee chats, job opportunities, and collaboration proposals are all welcome.",

@@ -48,6 +48,8 @@ export interface Education {
 
 export interface Project {
   title: string;
+  /** 상세·다이어그램 조회 키. 값이 있고 상세가 존재하면 카드가 클릭 대상이 됩니다 */
+  slug?: string;
   description: string;
   /** 재직 중 수행(work) / 개인·오픈소스(personal) — 프로젝트 섹션의 그룹 구분 */
   group: "work" | "personal";
@@ -61,4 +63,62 @@ export interface Project {
   githubUrl?: string;
   demoUrl?: string;
   paperUrl?: string;
+}
+
+/** 로케일 공용 데이터에서 쓰는 이중어 문자열 */
+export interface LocalizedText {
+  ko: string;
+  en: string;
+}
+
+/** 상세 본문의 한 절. 절 제목이 데이터에 있는 이유는 프로젝트마다 절 구성이 다르기 때문 */
+export interface DetailSection {
+  heading: string;
+  /** 각 항목이 문단 하나 */
+  body: string[];
+}
+
+export interface ProjectDetail {
+  /** 모달 상단 한 줄 요약 */
+  lead: string;
+  sections: DetailSection[];
+}
+
+export interface DiagramNode {
+  id: string;
+  /** 0부터 시작하는 격자 열 */
+  col: number;
+  /** 0부터 시작하는 격자 행 */
+  row: number;
+  label: LocalizedText;
+  /** 상자 안 둘째 줄 */
+  sublabel?: LocalizedText;
+  /** accent는 본인이 만들거나 바꾼 부분을 가리킬 때 씁니다 */
+  tone?: "default" | "accent" | "muted";
+  /** 여러 열을 차지하는 넓은 상자 (기본 1) */
+  colSpan?: number;
+}
+
+export interface DiagramEdge {
+  from: string;
+  to: string;
+  label?: LocalizedText;
+  style?: "solid" | "dashed";
+  /** both는 양쪽 화살촉 (기본 forward) */
+  dir?: "forward" | "both";
+}
+
+export interface DiagramGroup {
+  /** 격자에서 연속된 사각형을 이루어야 합니다 */
+  members: string[];
+  label: LocalizedText;
+  tone?: "default" | "accent";
+}
+
+export interface Diagram {
+  nodes: DiagramNode[];
+  edges: DiagramEdge[];
+  groups?: DiagramGroup[];
+  /** 그림 아래 설명이자 스크린리더용 desc */
+  caption: LocalizedText;
 }
