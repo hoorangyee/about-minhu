@@ -78,4 +78,50 @@ export const diagrams: Record<string, Diagram> = {
       en: "Leads arrive through three channels: inbound calls, bulk spreadsheet upload, and manual entry. Telephony runs over a WebSocket link to CTI middleware; I built both the console UI and its API.",
     },
   },
+
+  "payment-terminal": {
+    nodes: [
+      { id: "crm", col: 0, row: 0, label: { ko: "CRM 수납 화면", en: "CRM checkout" } },
+      { id: "plugin", col: 0, row: 1, label: { ko: "토스 결제 플러그인", en: "Toss plugin" }, sublabel: { ko: "결제 단말", en: "terminal" } },
+      { id: "podA", col: 1, row: 0, label: { ko: "API 파드 A", en: "API pod A" } },
+      { id: "podB", col: 1, row: 1, label: { ko: "API 파드 B", en: "API pod B" } },
+      { id: "kafka", col: 2, row: 0, tone: "accent", label: { ko: "Kafka", en: "Kafka" }, sublabel: { ko: "세션 릴레이", en: "session relay" } },
+    ],
+    edges: [
+      { from: "crm", to: "podA", label: { ko: "WS 세션", en: "WS session" } },
+      { from: "plugin", to: "podB", label: { ko: "WS 세션", en: "WS session" } },
+      { from: "podA", to: "kafka", dir: "both" },
+      { from: "podB", to: "kafka", dir: "both" },
+    ],
+    groups: [
+      { members: ["podA", "podB"], label: { ko: "멀티 파드", en: "Multiple pods" } },
+    ],
+    caption: {
+      ko: "CRM과 결제 플러그인의 WebSocket 세션이 서로 다른 파드에 붙으면 인메모리 레지스트리로는 단말을 찾지 못합니다. 파드 사이를 Kafka로 중계해 어느 조합이든 세션이 이어지게 했습니다.",
+      en: "When the CRM and the payment plugin land on different pods, an in-memory registry cannot find the terminal. Relaying sessions across pods through Kafka keeps any pairing connected.",
+    },
+  },
+
+  "desktop-x64": {
+    nodes: [
+      { id: "crm", col: 0, row: 0, tone: "accent", label: { ko: "CRM 본체", en: "CRM host" }, sublabel: { ko: "64비트", en: "64-bit" } },
+      { id: "ipc", col: 1, row: 0, tone: "accent", label: { ko: "IPC", en: "IPC" }, sublabel: { ko: "프로세스 간 통신", en: "cross-process" } },
+      { id: "srv", col: 2, row: 0, tone: "accent", label: { ko: "브릿지 프로세스", en: "Bridge process" }, sublabel: { ko: "32비트", en: "32-bit" } },
+      { id: "tel", col: 3, row: 0, label: { ko: "전화 연동 DLL", en: "Telephony DLL" } },
+      { id: "pay", col: 3, row: 1, label: { ko: "결제 단말 DLL", en: "Terminal DLL" } },
+    ],
+    edges: [
+      { from: "crm", to: "ipc", dir: "both" },
+      { from: "ipc", to: "srv", dir: "both" },
+      { from: "srv", to: "tel" },
+      { from: "srv", to: "pay" },
+    ],
+    groups: [
+      { members: ["tel", "pay"], label: { ko: "32비트 전용 벤더 DLL", en: "32-bit-only vendor DLLs" } },
+    ],
+    caption: {
+      ko: "64비트 전환을 막던 것은 32비트로만 제공되는 벤더 DLL이었습니다. 이들을 별도 32비트 프로세스에 가두고 본체와 IPC로 통신하게 해서, 본체만 64비트로 올렸습니다.",
+      en: "Vendor DLLs shipped only as 32-bit blocked the migration. Confining them to a separate 32-bit process that talks to the host over IPC let the host itself move to 64-bit.",
+    },
+  },
 };

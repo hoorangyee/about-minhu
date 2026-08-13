@@ -84,4 +84,60 @@ export const projectDetails: Record<string, ProjectDetail> = {
       },
     ],
   },
+
+  "payment-terminal": {
+    lead: "Integrated a Toss payment terminal into the CRM's checkout flow, owning both the desktop and web client work plus backend stabilization. When sessions landed on different pods and lost track of each other, I proposed and built a Kafka relay to fix it.",
+    sections: [
+      {
+        heading: "Background",
+        body: [
+          "This was an epic to wire a Toss payment terminal (their Front Plugin) into the CRM's checkout flow. The backend payment-session infrastructure already existed; I owned both the desktop CRM (.NET 6, WPF) and web client integrations, plus backend stabilization. The integration came about because Toss reached out about a partnership: pairing the terminal with MediCash, the company's own point-based payment service, to supply more Toss terminals to hospitals.",
+          "In the following quarter I kept fixing balance-consistency issues that surfaced whenever MediCash points and Toss payments mixed, and reworked the pairing screens and settings after the integration moved from leader mode to client mode. As of August it's still pending production rollout.",
+        ],
+      },
+      {
+        heading: "What I built",
+        body: [
+          "On the desktop CRM I built a WebSocket client with automatic reconnect and a single connection per app, implemented the Toss session and refund services, and wired them into the checkout screen — about 65 commits on a single ticket.",
+          "On the web side (apps/crm) I built the payment slice itself: a Zustand session state machine, a retry queue, and the WebSocket hooks around them.",
+          "On the backend I stabilized the failure and cancellation paths: sending session.abort to the plugin on cancel or failure so the terminal screen wouldn't get stuck, hardening the watchdogs that catch a dropped connection, and re-establishing the security context on the WebSocket handler.",
+          "In the following quarter I worked through a chain of MediCash consistency bugs in order: the quick-checkout discount summary not updating when points were applied mid-session, balances left sitting in pending payment by the point amount even after payment completed, stale balances reappearing when a prescription reloaded, and usage not showing up on screen for records created without a reservation. When the integration moved from leader mode to client mode, I built a new device pairing screen — issuing codes, listing devices, deregistering them — and removed the old terminal settings UI from preferences.",
+        ],
+      },
+      {
+        heading: "The multi-pod problem",
+        body: [
+          "When the payment plugin's WebSocket and the CRM's WebSocket landed on different pods, we'd hit a DEVICE_OFFLINE error. Sessions lived in an in-memory registry, so whenever the two connections landed on different pods, neither pod had any way to find the other terminal.",
+          "I proposed this structure myself and built it: a Kafka fan-out relay that carries session state across pods, so no matter which pod pairing the two connections land on, the session reaches the other side. Payment sessions now stay connected regardless of how the pods get assigned.",
+        ],
+      },
+    ],
+  },
+
+  "desktop-x64": {
+    lead: "Migrated the CRM host to 64-bit by isolating vendor DLLs that only shipped as 32-bit into their own process. I proposed and led the migration.",
+    sections: [
+      {
+        heading: "Background",
+        body: [
+          "Porting the CRM host to 64-bit ran into vendor DLLs that only shipped as 32-bit builds: the carrier-specific Smart Call APIs for KT, LG, and SK, and the payment-terminal integration module. I proposed and led this migration.",
+        ],
+      },
+      {
+        heading: "What I built",
+        body: [
+          "I split those DLLs into a dedicated 32-bit process (Dll32Server) that talks to the host over IPC, and moved the KT/LG/SK Smart Call integration and payment-terminal logic into it.",
+          "I reworked how the process's lifecycle was managed, moved the host itself to multithreading, added automatic restarts with error logging, and changed startup to initialize only the services actually needed.",
+          "I cleaned up event delivery as well, wiring a global event sender through injection to stop events from getting dropped, and running the process on an STA thread to accommodate the KT DLL's habit of raising its own UI.",
+          "I supported regression testing across every carrier and the full payment-terminal surface as QA feedback came in.",
+        ],
+      },
+      {
+        heading: "The data behind it",
+        body: [
+          "To back the migration call with data, I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution as evidence for the decision.",
+        ],
+      },
+    ],
+  },
 };
