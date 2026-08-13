@@ -57,6 +57,10 @@ body {
   color: var(--paper);
 }
 
+dialog::backdrop {
+  background: rgb(0 0 0 / 0.5);
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
