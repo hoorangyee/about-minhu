@@ -76,7 +76,7 @@ export const projects: Project[] = [
     title: "Deploy Notification Relay",
     slug: "deploy-notifier",
     group: "work",
-    context: "SmartDoctor · Built and operated on my own initiative",
+    context: "SmartDoctor · Internal tool wired into the deploy pipeline",
     period: "2026",
     description:
       "An internal tool built to cut down on everyone individually checking whether a production hotfix actually shipped. It listens for deploy webhooks, diffs the commit range against the previous deploy, and posts a completion reply on the Slack thread linked to whatever Jira issue keys show up in those commits. I judged that notifying on regular releases too would likely become noise, so it picks out hotfix-shaped deploys only, and when it doesn't have enough information to tell, it stays silent and logs a warning rather than risk a false report.",
