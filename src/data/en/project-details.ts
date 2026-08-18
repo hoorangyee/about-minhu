@@ -70,9 +70,9 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Three intake channels",
         body: [
-          "Leads arrive through three channels: a bulk Excel upload, manual single-lead registration, and automatic creation from inbound calls. The bulk upload became a wizard — upload, customer matching, then data correction — with a modal calling out failed rows and cleanup around the server's matchType classification. I had the validate response embed candidate customers directly, which removed the burst of per-row customer-search calls that used to follow it.",
+          "Leads arrive through three channels: a bulk Excel upload, manual single-lead registration, and automatic creation from inbound calls. The bulk upload became a wizard — upload, customer matching, then data correction — with a modal calling out failed rows, and matched rows classified straight off the server's matchType. I had the validate response embed candidate customers directly, which removed the burst of per-row customer-search calls that used to follow it.",
           "The manual registration modal auto-matches contact info and requires both lead-source fields to be filled together. On an inbound call, the module auto-assigns the logged-in agent and creates a lead automatically; if the number isn't registered yet, it opens the registration modal automatically.",
-          "The lead list got header filters across eight columns, a two-level tree filter for lead source, and filter state persisted to localStorage. I later moved column filtering entirely server-side so the list, tabs, and Excel export all agreed on the same result set. I also added an API for a customer's full consultation history plus edit/delete on individual records, and, across three repositories — the desktop permission tree, the API's enum, and the web's permission checks — eleven CCMS-specific permission codes.",
+          "The lead list got header filters across eight columns, a two-level tree filter for lead source, and filter state persisted to localStorage. I later moved column filtering entirely server-side so the list, tabs, and Excel export all agreed on the same result set. I also added an API for a customer's full consultation history, plus edit and delete on individual records. Permissions took eleven CCMS-specific codes, added across three repositories: the desktop permission tree, the API's enum, and the web's permission checks.",
         ],
       },
       {
@@ -86,7 +86,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
   },
 
   "payment-terminal": {
-    lead: "Integrated a Toss payment terminal into the CRM's checkout flow, owning both the desktop and web client work plus backend stabilization. When sessions landed on different pods and lost track of each other, I proposed and built a Kafka relay to fix it.",
+    lead: "Integrated a Toss payment terminal into the CRM's checkout flow, owning both the desktop and web client work plus backend stabilization. When sessions landed on different pods and lost track of each other, I fixed it with a Kafka relay.",
     sections: [
       {
         heading: "Background",
@@ -115,12 +115,13 @@ export const projectDetails: Record<string, ProjectDetail> = {
   },
 
   "desktop-x64": {
-    lead: "Migrated the CRM host to 64-bit by isolating vendor DLLs that only shipped as 32-bit into their own process. I proposed and led the migration.",
+    lead: "Migrated the CRM host to 64-bit by isolating vendor DLLs that only shipped as 32-bit into their own process, talking to the host over IPC. I proposed and led the migration.",
     sections: [
       {
         heading: "Background",
         body: [
-          "Porting the CRM host to 64-bit ran into vendor DLLs that only shipped as 32-bit builds: the carrier-specific Smart Call APIs for KT, LG, and SK, and the payment-terminal integration module. I proposed and led this migration.",
+          "Porting the CRM host to 64-bit ran into vendor DLLs that only shipped as 32-bit builds: the carrier-specific Smart Call APIs for KT, LG, and SK, and the card payment-terminal (VAN) module. Smart Call is the telephony system wired into the CRM, and the terminal module handles card payments in the checkout flow.",
+          "A 64-bit host can't load those DLLs as they stand, so the migration needed a way to keep both integrations working. The work ran from late July through September 2025, with about 40 commits concentrated in August.",
         ],
       },
       {
@@ -129,13 +130,13 @@ export const projectDetails: Record<string, ProjectDetail> = {
           "I split those DLLs into a dedicated 32-bit process (Dll32Server) that talks to the host over IPC, and moved the KT/LG/SK Smart Call integration and payment-terminal logic into it.",
           "I reworked how the process's lifecycle was managed, moved the host itself to multithreading, added automatic restarts with error logging, and changed startup to initialize only the services actually needed.",
           "I cleaned up event delivery as well, wiring a global event sender through injection to stop events from getting dropped, and running the process on an STA thread to accommodate the KT DLL's habit of raising its own UI.",
-          "I supported regression testing across every carrier and the full payment-terminal surface as QA feedback came in.",
+          "I supported regression testing across every carrier and the full payment-terminal surface, and fixed the items QA sent back as failed.",
         ],
       },
       {
         heading: "The data behind it",
         body: [
-          "I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution.",
+          "I added OS 32-bit/64-bit ratio tracking to our Sentry collection, which gave us the field's actual bitness distribution. It rode along with the Sentry observability work I did that same quarter.",
         ],
       },
     ],
@@ -155,14 +156,14 @@ export const projectDetails: Record<string, ProjectDetail> = {
         body: [
           "On the web I built a new DUR check popup slice: issue a confirmation number, then run the check, as two calls. Results render in a table, reasons can be entered and sent in bulk, and the whole thing is wired into the save gate — when nothing is flagged, saving proceeds with no popup at all.",
           "On the backend I built the broker connection to HIRA from scratch. I moved a hardcoded 38-character auth code to a dynamic database lookup, implemented every check type that can appear on a prescription, and unified the outgoing message format. Interaction checks run against a master database loaded from S3 (SQLite packed in a zip), and daily maximum dosage for capacity-warning items is normalized to active-ingredient milligrams. I added a check-cancellation endpoint and made the reference database's version follow whatever version was actually loaded, instead of a fixed value.",
-          "I kept following up on it afterward. Deleting a record now also triggers DUR cancellation, so the HIRA-side check entry doesn't linger. I added a resubmit path for check response codes 53004 through 53008, aligned the invariant that the DUR confirmation number and the outside-prescription issuance number must match with how NC (the in-house EMR) handles it, and fixed an infinite loop in issuance-number generation caused by a date-max lookup that didn't match its own LIKE condition. Daily dosage now accepts fractional values, and I removed a spot where a single dose was being split and calculated twice.",
+          "I kept fixing what surfaced once the integration was in. Deleting a record now also triggers DUR cancellation, so the HIRA-side check entry doesn't linger. I added a resubmit path for check response codes 53004 through 53008, aligned the invariant that the DUR confirmation number and the outside-prescription issuance number must match with how NC (the in-house EMR) handles it, and fixed an infinite loop in issuance-number generation caused by a date-max lookup that didn't match its own LIKE condition. Daily dosage now accepts fractional values, and I removed a spot where a single dose was being split and calculated twice.",
         ],
       },
       {
         heading: "Why a separate verification tool",
         body: [
           "DUR checks are a real call to a HIRA server and back, so looking at the screen alone couldn't tell me whether a given response was actually correct.",
-          "So I built a separate CLI, dur-conformance, in its own repo. It replays the same confirmation-number and check calls the CRM makes, and cases declared in YAML get run through a loader and runner that compares each response against expected values and produces a report. It isn't wired into CI — I used it as a one-off verification tool whenever I touched the integration in a meaningful way.",
+          "So I built a separate CLI, dur-conformance, in its own repo. It replays the same confirmation-number and check calls the CRM makes, runs the cases declared in YAML one by one, compares each response against its expected values, and writes a report. It isn't wired into CI; I ran it by hand after reworking the outgoing message format or the check logic.",
         ],
       },
     ],
@@ -174,13 +175,13 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Background",
         body: [
-          "An internal tool to cut down on people individually checking whether a production deploy went out. Nobody asked for it — I built it because I felt the need myself. The core behavior is simple: pull issue keys out of the commits in a deploy's range, find the Slack thread linked to each issue, and reply there once the deploy completes.",
+          "Checking whether a production deploy had actually landed was left to each person who needed to know. The core behavior is simple: pull issue keys out of the commits in a deploy's range, find the Slack thread linked to each issue, and reply there once the deploy completes.",
         ],
       },
       {
         heading: "What I built",
         body: [
-          "I built the Vercel webhook entry point with signature verification and async processing, a client that looks up the previous production deploy and pulls the commit range through the GitHub compare API (handling pagination and response truncation), a Jira thread lookup paired with a Slack archive-link parser, and the orchestration that ties it all together, checking for an existing reply before posting one.",
+          "I built the Vercel webhook entry point with signature verification and async processing, a client that looks up the previous production deploy and pulls the commit range through the GitHub compare API (handling pagination and response truncation), a Jira thread lookup paired with a Slack archive-link parser, and the step that checks for an existing reply before posting one. Webhook in, commit range, thread lookup, reply out — the four steps run as one pass.",
           "Redeploys of the same SHA are skipped, and commit file lookups run in parallel. I covered edge cases with tests: staying at 200 on a malformed webhook body, returning 401 when the secret isn't configured.",
           "On July 15, 2026 I widened the target projects to five, including the call-center console and the wait-status board, rotated the webhook secret, and cut over. I also wrote design-spec docs, a script that replays real payloads for verification, and a DRY_RUN mode.",
         ],
@@ -190,7 +191,6 @@ export const projectDetails: Record<string, ProjectDetail> = {
         body: [
           "It started out notifying on every production deploy. I judged that notifying on routine releases too would likely become noise, so I narrowed it to hotfix-style deploys only: same branch as the previous production deploy, or same service prefix and major.minor with only the patch bumped, and only when the first commit line matches hotfix formatting.",
           "When it doesn't have enough information to decide, it stays silent and just logs a warning instead of sending anything. I chose silence over a wrong notification.",
-          "Nobody asked me to build it, but it's still in active use on the team today.",
         ],
       },
     ],
@@ -203,13 +203,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "Background",
         body: [
           "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. Clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — from a phone, without being at a PC.",
-          "Getting pulled onto it came down to development moving fast enough that the scope of what I owned simply grew. One person being able to carry more than one product at once is the real backdrop for that shift.",
         ],
       },
       {
         heading: "Screens built",
         body: [
-          "I stood up the `/mobile` route and shell, built a shared UI kit — bottom sheets, confirmation sheets, list-state components — and hung the screens off it: a home dashboard (today's tasks), a reservation list (date-range and status-chip filters, search, inline confirm) and detail view (confirm, cancel, mark visited), new-reservation creation, a consultation-applicant list and detail view (status changes, notes, SMS), a reviews-and-Q&A list with a reply screen, the notification inbox (list, read state, deep links), and the catch-all covering announcements, clinic-profile completeness, and logout — the full set a mobile operator needs.",
+          "I stood up the `/mobile` route and shell, built a shared UI kit — bottom sheets, confirmation sheets, list-state components — and hung the screens off it. A home dashboard (today's tasks) leads, and reservations split into a list (date-range and status-chip filters, search, inline confirm), a detail view (confirm, cancel, mark visited), and new-reservation creation. Consultations got an applicant list and detail view (status changes, notes, SMS); reviews got a reviews-and-Q&A list with a reply screen. On top of that sit the notification inbox (list, read state, deep links) and the catch-all covering announcements, clinic-profile completeness, and logout — the full set a mobile operator needs.",
           "I matched the design against a demo prototype as I built out each real screen, and added a trigger that routes mobile-device visitors straight to the mobile screens. Reservation lookups were aligned to the same filter model as the PC reservation-management screen, with counts driven off the current query results, and I worked through a run of mobile-specific rough edges: counts flickering to empty on every filter change, a horizontal scroll strip getting clipped at the screen edge, and the page starting zoomed in on first load.",
           "I also touched the build environment to stop Vercel builds from dying with out-of-memory errors — lowering the build worker count and raising the dev server's heap limit.",
         ],
