@@ -69,7 +69,7 @@ export const projects: Project[] = [
     context: "SmartDoctor · Web + backend, plus a purpose-built verification CLI",
     period: "2026",
     description:
-      "Built the drug-utilization-review flow that checks prescriptions and diagnoses against HIRA (Korea's health-insurance review agency), from the web popup to the backend broker integration. Implemented every check type for prescriptions and wrote a case-based (YAML) CLI tool that regression-verifies the integration's correctness.",
+      "Built the drug-utilization-review flow that checks prescriptions and diagnoses against HIRA (Korea's health-insurance review agency), from the web popup to the backend broker integration. Implemented every check type for prescriptions and wrote a case-based (YAML) CLI tool that checks the integration for regressions.",
     techStack: ["Kotlin", "React", "AWS S3", "SQLite"],
   },
   {

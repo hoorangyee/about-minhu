@@ -56,8 +56,10 @@ export const diagrams: Record<string, Diagram> = {
       { id: "ws", col: 1, row: 0, label: { ko: "WebSocket", en: "WebSocket" }, sublabel: { ko: "지수 백오프 재연결", en: "backoff reconnect" } },
       { id: "web", col: 2, row: 0, tone: "accent", label: { ko: "상담 화면", en: "Console UI" }, sublabel: { ko: "React", en: "React" } },
       { id: "api", col: 3, row: 0, tone: "accent", label: { ko: "상담 API", en: "Console API" }, sublabel: { ko: "Kotlin", en: "Kotlin" } },
-      // excel·manual을 col1에 세로로 두는 이유: col0에 두면 web으로 가는 간선의
-      // 수평 구간이 col1의 상자를 관통합니다. col1↔col2 사이 빈 통로로 올려보냅니다
+      /*
+       * excel·manual을 col1에 세로로 두는 이유: col0에 두면 web으로 가는 간선의
+       * 수평 구간이 col1의 상자를 관통합니다. col1↔col2 사이 빈 통로로 올려보냅니다.
+       */
       { id: "excel", col: 1, row: 1, label: { ko: "엑셀 대량 업로드", en: "Bulk upload" } },
       { id: "manual", col: 1, row: 2, label: { ko: "단일 등록", en: "Manual entry" } },
       { id: "db", col: 3, row: 1, label: { ko: "MSSQL", en: "MSSQL" } },
@@ -131,8 +133,10 @@ export const diagrams: Record<string, Diagram> = {
       { id: "api", col: 1, row: 0, tone: "accent", label: { ko: "DUR API", en: "DUR API" }, sublabel: { ko: "Kotlin", en: "Kotlin" } },
       { id: "broker", col: 2, row: 0, tone: "accent", label: { ko: "연동 브로커", en: "Broker" } },
       { id: "hira", col: 3, row: 0, label: { ko: "심평원", en: "HIRA" }, sublabel: { ko: "국가 점검 체계", en: "national registry" } },
-      // cli를 col0·row1에 두는 이유: api로 가는 간선의 수직 구간이 col0·col1 사이
-      // 빈 통로를 지나며, 이 통로는 accent 그룹(api·broker) 경계 바깥이라 관통하지 않습니다
+      /*
+       * cli를 col0·row1에 두는 이유: api로 가는 간선의 수직 구간이 col0·col1 사이
+       * 빈 통로를 지나며, 이 통로는 accent 그룹(api·broker) 경계 바깥이라 관통하지 않습니다.
+       */
       { id: "cli", col: 0, row: 1, tone: "accent", label: { ko: "검증 CLI", en: "Verification CLI" }, sublabel: { ko: "케이스 기반", en: "case-driven" } },
       { id: "master", col: 1, row: 1, label: { ko: "기준 DB", en: "Reference DB" }, sublabel: { ko: "병용금기 목록", en: "interaction data" } },
     ],
@@ -156,8 +160,10 @@ export const diagrams: Record<string, Diagram> = {
     nodes: [
       { id: "deploy", col: 0, row: 0, label: { ko: "배포 플랫폼", en: "Deploy platform" }, sublabel: { ko: "웹훅", en: "webhook" } },
       { id: "relay", col: 1, row: 0, tone: "accent", label: { ko: "알림 릴레이", en: "Notifier" }, sublabel: { ko: "핫픽스 판별", en: "hotfix filter" } },
-      // git·jira·slack을 col2에 세로로 쌓는 이유: 가로로 펼치면 relay에서 뒤쪽 상자로 가는
-      // 간선이 앞쪽 상자를 관통합니다. col1·col2 사이 빈 통로로 세 간선 모두 수직 우회시킵니다
+      /*
+       * git·jira·slack을 col2에 세로로 쌓는 이유: 가로로 펼치면 relay에서 뒤쪽 상자로 가는
+       * 간선이 앞쪽 상자를 관통합니다. col1·col2 사이 빈 통로로 세 간선 모두 수직 우회시킵니다.
+       */
       { id: "git", col: 2, row: 0, label: { ko: "커밋 범위 조회", en: "Commit range" } },
       { id: "jira", col: 2, row: 1, label: { ko: "이슈 스레드 링크", en: "Issue thread link" } },
       { id: "slack", col: 2, row: 2, label: { ko: "Slack 스레드", en: "Slack thread" }, sublabel: { ko: "완료 답글", en: "reply" } },
@@ -173,7 +179,7 @@ export const diagrams: Record<string, Diagram> = {
     ],
     caption: {
       ko: "배포 웹훅을 받으면 직전 배포와의 커밋 범위에서 이슈 키를 뽑고, 그 이슈에 연결된 Slack 스레드를 찾아 배포 완료를 답글로 남깁니다. 판별에 필요한 정보가 없으면 잘못 알리는 대신 침묵합니다.",
-      en: "On a deploy webhook it extracts issue keys from the commit range since the previous deploy, finds the Slack thread linked to each issue, and replies there. When the inputs needed to decide are missing, it stays silent rather than notify wrongly.",
+      en: "On a deploy webhook it extracts issue keys from the commit range since the previous deploy, finds the Slack thread linked to each issue, and replies there. When the inputs needed to decide are missing, it stays silent instead of sending a wrong notification.",
     },
   },
 

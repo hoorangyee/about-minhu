@@ -21,9 +21,11 @@ export function Header({ locale }: { locale: Locale }) {
 
   const [activeId, setActiveId] = useState<string>("");
   const [menuOpen, setMenuOpen] = useState(false);
-  // 내비 클릭 직후에는 클릭한 섹션을 고정한다. 마지막 두 섹션처럼 같은 최하단
-  // 스크롤 위치를 공유하는 경우 기하 계산만으로는 클릭 의도를 구분할 수 없기 때문.
-  // 사용자가 직접 스크롤 입력(휠·터치·키보드)을 하면 고정을 풀고 계산으로 복귀한다.
+  /*
+   * 내비를 클릭한 직후에는 클릭한 섹션을 고정합니다. 마지막 두 섹션처럼 같은 최하단
+   * 스크롤 위치를 공유하면 기하 계산만으로는 클릭 의도를 구분할 수 없기 때문입니다.
+   * 사용자가 직접 스크롤 입력(휠·터치·키보드)을 하면 고정을 풀고 계산으로 돌아갑니다.
+   */
   const pinnedId = useRef<string | null>(null);
 
   function handleNavClick(id: string) {
@@ -48,7 +50,7 @@ export function Header({ locale }: { locale: Locale }) {
         setActiveId(sections[sections.length - 1].id);
         return;
       }
-      // 기준선(뷰포트 38% 지점)을 지난 마지막 섹션을 활성으로 판정 — 히어로에서는 없음("")
+      // 기준선(뷰포트 38% 지점)을 지난 마지막 섹션이 활성. 히어로 구간에서는 빈 문자열
       const anchorY = window.innerHeight * 0.38;
       let current = "";
       for (const s of sections) {
