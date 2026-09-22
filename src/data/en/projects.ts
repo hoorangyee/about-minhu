@@ -14,7 +14,7 @@ export const projects: Project[] = [
     context: "SmartDoctor · Module design & implementation, plus the runtime foundation",
     period: "2025 — Present",
     description:
-      "A long-running migration of the desktop CRM's core screens to the web (React). Starting with the monthly reservation calendar, I designed and built my modules and improved query performance by splitting month-wide fetches into per-week cached requests. Because the web app runs inside a desktop webview, I also built the runtime foundation — authentication (refresh tokens), the native bridge, and WebView2 runtime deployment. Later I established an 'add API → standalone web app → webview embed' pattern and ported three desktop-only screens.",
+      "A long-running migration of the desktop CRM's core screens to the web (React). Starting with the monthly reservation calendar, I designed and built my modules and split month-wide fetches into parallel weekly requests that can reuse the server’s date-range cache. Because the web app runs inside a desktop webview, I also built the runtime foundation — authentication (refresh tokens), the native bridge, and WebView2 runtime deployment. Later I established an 'add API → standalone web app → webview embed' pattern and ported three desktop-only screens.",
     impact: "Cross-stack development spanning the web, API, and desktop codebases",
     techStack: ["React", "TypeScript", "Zustand", "Kotlin", "C#", "WebView2"],
   },
@@ -26,7 +26,7 @@ export const projects: Project[] = [
     period: "2026",
     description:
       "Built a new clinical records screen covering diagnosis and prescription input, consultation-fee calculation, treatment-pass usage, and record saving. Handled fine-grained input UX and data integrity together: prescription autocomplete with input debouncing, automatic consultation-fee assignment and release, guards against duplicate saves from repeated clicks, and a refactor that made the form the single source of truth.",
-    impact: "Owned the largest module of the migration (~60 tickets in a quarter)",
+    impact: "Connected prescription entry, DUR checks, and saving in one workflow",
     techStack: ["React", "TypeScript", "Kotlin", "WebView2"],
   },
   {
@@ -37,7 +37,7 @@ export const projects: Project[] = [
     period: "2026",
     description:
       "A new web module for collecting, assigning, and tracking consultation leads at clinic call centers. It talks to the telephony middleware over WebSocket to create leads from incoming calls automatically, and provides three intake channels — bulk Excel upload, individual registration, and incoming-call auto-creation — plus server-side filtering. Fixed field-reported issues in short cycles, including a race condition that duplicated leads on a single call and reconnection instability.",
-    impact: "Contributed to adoption by a large plastic-surgery clinic running a call center",
+    impact: "Replay with 12 categories observed in production: initial option requests 12 → 1, down 91.7%",
     techStack: ["React", "TypeScript", "Kotlin", "WebSocket", "MSSQL"],
   },
   {

@@ -15,7 +15,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "What I built",
         body: [
           "I started with the monthly reservation calendar — the \"month view\" — designing and building its layout, cell grid, department infinite-scroll, and column-width logic. From there I kept owning whatever screen came next in the migration, design through implementation.",
-          "The month view originally fetched an entire month's reservations in one request. I replaced that with per-week cached requests, which improved query performance as the migration grew.",
+          "The month view originally fetched an entire month's reservations in one request. I split it into parallel weekly requests that can reuse the server’s date-range cache. Replaying the original and changed code confirmed identical reservation results when a 35-day range was split into five seven-day requests.",
           "Because the web app runs inside a desktop webview, I also built the runtime foundation alongside the screens: refresh-token authentication, a bridge for events like settings changes between desktop and web, and pinned WebView2 runtime deployment after recurring runtime errors on certain hospital PCs.",
         ],
       },
@@ -23,6 +23,12 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "Establishing a pattern",
         body: [
           "Later in the migration I settled on a repeatable pattern — add the API, build a standalone web app, embed it in the desktop webview — and applied it to three more desktop-only screens: assignment inquiry, the clinic status board, and the reception/wait-status board. Building the API first and the web app in isolation before wiring it into the desktop webview kept all three ports fast and consistent.",
+        ],
+      },
+      {
+        heading: "Polling during persistent failures",
+        body: [
+          "Added longer polling intervals after consecutive failures. Screens with a 60-second base interval switch to 300 seconds after three consecutive failures. In the sustained-failure state, scheduled polling frequency falls from 60 to 12 times per hour (80%). This is calculated from the configured intervals, not measured production traffic.",
         ],
       },
     ],
@@ -34,7 +40,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Background",
         body: [
-          "Inside the reservation-info panel sits the record-entry screen: diagnosis codes and prescriptions, consultation-fee and exam-fee calculation, treatment-pass usage, and saving the record itself. Rebuilding this screen on the web was, by ticket count, the largest project I took on — roughly 60 related tickets in a single quarter.",
+          "Inside the reservation-info panel sits the record-entry screen: diagnosis codes and prescriptions, consultation-fee and exam-fee calculation, treatment-pass usage, and saving the record itself. I rebuilt the full workflow on the web, from prescription entry to saving.",
           "Because the screen deals directly with prescriptions and diagnoses, integrating DUR — Korea's HIRA drug-utilization review — came along naturally while building it. The check runs as two calls: issue a confirmation number, then run the review. When nothing is flagged, saving proceeds without a popup; when something is flagged, the check result surfaces first. I wired this into the save gate.",
         ],
       },
@@ -44,7 +50,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
           "I built several input-assist features around diagnosis and prescription entry. Prescription-code autocomplete debounces input and sorts search results, and shows group-order and treatment-pass status through icons and tooltips. Entering a duplicate diagnosis code triggers a warning, and deleting a code also clears its fee assignment.",
           "The save pipeline consolidates onto a single save API and chains into payment completion once a save succeeds. Consultation and symptom notes save as RTF.",
           "Since the screen runs inside a desktop webview, I also handled the embedding: passing customer and reservation IDs as query parameters, syncing the URL when the customer changes, optimizing WebView2 memory usage, and gating exposure behind a QA-only flag for a staged rollout.",
-          "In March 2026 I worked through roughly 30 tickets against this screen in a focused QA round — scrolling, layout, tooltip, and focus issues, plus marking records saved from NC (the in-house EMR) as read-only. Later QA rounds covered insurance-change handling, missing exam fees, blocking zero-amount payments on already-completed records, and auto-filling group-order prescription attributes and statement notes.",
+          "In March 2026 I addressed scrolling, layout, tooltip, and focus issues found in QA, and marked records saved from NC (the in-house EMR) as read-only. Later QA rounds covered insurance-change handling, missing exam fees, blocking zero-amount payments on already-completed records, and auto-filling group-order prescription attributes and statement notes.",
         ],
       },
       {
@@ -70,7 +76,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "Three intake channels",
         body: [
-          "Leads arrive through three channels: a bulk Excel upload, manual single-lead registration, and automatic creation from inbound calls. The bulk upload became a wizard — upload, customer matching, then data correction — with a modal calling out failed rows, and matched rows classified straight off the server's matchType. I had the validate response embed candidate customers directly, which removed the burst of per-row customer-search calls that used to follow it.",
+          "Leads arrive through three channels: a bulk Excel upload, manual single-lead registration, and automatic creation from inbound calls. The bulk upload became a wizard — upload, customer matching, then data correction — with a modal calling out failed rows, and matched rows classified straight off the server's matchType. I had the validate response embed candidate customers directly, which removed the follow-up customer search for each distinct phone number requiring a match.",
           "The manual registration modal auto-matches contact info and requires both lead-source fields to be filled together. On an inbound call, the module auto-assigns the logged-in agent and creates a lead automatically; if the number isn't registered yet, it opens the registration modal automatically.",
           "The lead list got header filters across eight columns, a two-level tree filter for lead source, and filter state persisted to localStorage. I later moved column filtering entirely server-side so the list, tabs, and Excel export all agreed on the same result set. I also added an API for a customer's full consultation history, plus edit and delete on individual records. Permissions took eleven CCMS-specific codes, added across three repositories: the desktop permission tree, the API's enum, and the web's permission checks.",
         ],
@@ -79,7 +85,15 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "What broke in the field",
         body: [
           "A race condition let a single inbound call spawn two leads, and consultation drafts in progress would disappear if the call dropped mid-conversation. I fixed both as part of stabilizing the inbound-call path.",
-          "Later, in July 2026, I removed an N+1 pattern where the lead-source dropdown queried its options once per row, replacing it with a single batch endpoint for the whole list.",
+          "Later, in July 2026, I removed an N+1 pattern that queried options once per lead-source category, replacing it with a single batch endpoint for the whole list.",
+        ],
+      },
+      {
+        heading: "Measured results",
+        body: [
+          "Replaying the original and changed customer-matching code with 1,000 distinct auto-matched phone numbers reduced follow-up searches from 1,000 to zero. Results also matched for repeated numbers, new customers, and ambiguous matches. The initial file validation and final registration requests were outside this measurement.",
+          "Twenty-six recent production log responses showed 12 lead-source categories at one clinic. Replaying both implementations with that category count reduced initial option requests from 12 to 1 (91.7%). Including the category lookup, related requests fell from 13 to 2 (84.6%). An immediate remount with a fresh options cache made no additional option requests in either version.",
+          "For Excel export, I removed redundant validation of merged-cell ranges. A local benchmark with 300 synthetic leads, 600 rows, and 4,500 merged ranges reduced median file-generation time from 1.77 seconds to 19 ms (98.9%). Both implementations ran five measured trials with Apache POI 5.4.1, and every output was checked for identical cell values and merged ranges. This measures file generation, excluding database queries and download time.",
         ],
       },
     ],
@@ -98,7 +112,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "What I built",
         body: [
-          "On the desktop CRM I built a WebSocket client with automatic reconnect and a single connection per app, implemented the Toss session and refund services, and wired them into the checkout screen — about 65 commits on a single ticket.",
+          "On the desktop CRM I built a WebSocket client with automatic reconnect and a single connection per app, implemented the Toss session and refund services, and wired them into the checkout screen.",
           "On the web side I built the payment slice itself: a Zustand session state machine, a retry queue, and the WebSocket hooks around them.",
           "On the backend I stabilized the failure and cancellation paths: sending session.abort to the plugin on cancel or failure so the terminal screen wouldn't get stuck, hardening the watchdogs that catch a dropped connection, and re-establishing the security context on the WebSocket handler.",
           "Later I worked through a chain of MediCash consistency bugs in order: the quick-checkout discount summary not updating when points were applied mid-session, balances left sitting in pending payment by the point amount even after payment completed, stale balances reappearing when a prescription reloaded, and usage not showing up on screen for records created without a reservation. When the integration moved from leader mode to client mode, I built a new device pairing screen — issuing codes, listing devices, deregistering them — and removed the old terminal settings UI from preferences.",
@@ -121,7 +135,7 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "Background",
         body: [
           "Porting the CRM host to 64-bit ran into vendor DLLs that only shipped as 32-bit builds: the carrier-specific Smart Call APIs for KT, LG, and SK, and the card payment-terminal (VAN) module. Smart Call is the telephony system wired into the CRM, and the terminal module handles card payments in the checkout flow.",
-          "A 64-bit host can't load those DLLs as they stand, so the migration needed a way to keep both integrations working. The work ran from late July through September 2025, with about 40 commits concentrated in August.",
+          "A 64-bit host can't load those DLLs as they stand, so the migration needed a way to keep both integrations working. The work ran from late July through September 2025.",
         ],
       },
       {
