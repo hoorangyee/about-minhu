@@ -1,6 +1,37 @@
 import type { ProjectDetail } from "@/types/portfolio";
 
 export const projectDetails: Record<string, ProjectDetail> = {
+  "architecture-prediction-model": {
+    lead: "A joint entry with an architecture teammate. I contributed from a CS/AI perspective to the core idea, prediction-system concepts, narrative, and presentation logic. My architecture teammate led the architectural design.",
+    sections: [
+      {
+        heading: "The question",
+        body: [
+          "A thought experiment taking a future of fully predictable human behavior to its extreme. It asks not only whether AI predictions are accurate, but how environments designed around those predictions influence human choice.",
+        ],
+      },
+      {
+        heading: "A self-reinforcing prediction loop",
+        body: [
+          "AI predicts behavior, spaces are designed around those predictions, and people live within them. Their behavior becomes data that reinforces the original predictions: prediction → spatial design → behavior → data → prediction.",
+          "Lives that were never chosen leave no trace in that data. The project questions whether high prediction accuracy describes the range of possible lives, or reflects choices narrowed by an environment built around the predictions.",
+        ],
+      },
+      {
+        heading: "My role and collaboration",
+        body: [
+          "I helped clarify the core idea and problem framing, develop the AI and prediction-system concepts, and structure the feedback-loop argument. Working with my architecture teammate, I reviewed the narrative and presentation logic and provided feedback.",
+          "The collaboration brought a developer’s understanding of data and system feedback into architecture. My contribution was to examine the relationship between observed behavior and the choices an environment allows, and explain the conditions under which a technology operates and affects people.",
+        ],
+      },
+      {
+        heading: "Competition result",
+        body: [
+          "Our joint entry was selected in the 2026 젊은 건축가포럼 건축상 (입선 / Selected Entry).",
+        ],
+      },
+    ],
+  },
   "crm-web-migration": {
     lead: "A long-running migration of the desktop CRM's core screens to the web, starting with the reservation calendar and ending with a repeatable pattern applied to three more screens.",
     sections: [

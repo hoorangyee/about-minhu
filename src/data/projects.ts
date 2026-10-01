@@ -111,4 +111,17 @@ export const projects: Project[] = [
     techStack: ["Next.js", "TypeScript", "Drizzle", "Turso", "Auth.js", "Vitest"],
     githubUrl: "https://github.com/hoorangyee/woodshed",
   },
+  {
+    title: "한국 건축: 예언 모델",
+    slug: "architecture-prediction-model",
+    group: "personal",
+    context: "건축 전공 팀원과 공동 출품 · 개념·서사 개발",
+    period: "2026",
+    description:
+      "AI의 예측이 공간을 설계하고, 그 공간에서의 행동이 다시 예측을 강화하는 미래를 가정한 건축 협업 프로젝트입니다. 선택하지 않은 삶의 가능성이 데이터에서 사라질 수 있다는 문제의식과 예측 시스템의 개념·발표 논리 구성에 기여했습니다.",
+    impact: "2026 젊은 건축가포럼 건축상 · 입선",
+    techStack: [],
+    roles: ["개념 개발", "AI·예측 시스템 구상", "서사 구성", "분야 간 협업"],
+    bookUrl: "https://a5124-architecture-book.vercel.app",
+  },
 ];

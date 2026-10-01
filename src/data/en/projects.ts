@@ -115,4 +115,17 @@ export const projects: Project[] = [
     techStack: ["Next.js", "TypeScript", "Drizzle", "Turso", "Auth.js", "Vitest"],
     ...linksOf("Woodshed"),
   },
+  {
+    title: "Korean Architecture: A Prediction Model",
+    slug: "architecture-prediction-model",
+    group: "personal",
+    context: "Joint entry with an architecture teammate · Concept & narrative development",
+    period: "2026",
+    description:
+      "An interdisciplinary architecture project imagining a future where AI predictions shape spaces, and behavior in those spaces feeds back into the predictions. I contributed to the AI and prediction concepts and the narrative, asking how lives never chosen can disappear from the data.",
+    impact: "2026 젊은 건축가포럼 건축상 · Selected Entry",
+    techStack: [],
+    roles: ["Concept Development", "AI / Prediction Concepts", "Narrative Development", "Interdisciplinary Collaboration"],
+    bookUrl: "https://a5124-architecture-book.vercel.app",
+  },
 ];

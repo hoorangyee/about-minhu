@@ -1,5 +1,6 @@
 import type { Diagram, Project, ProjectDetail } from "@/types/portfolio";
 import type { Locale } from "@/i18n/config";
+import { ui } from "@/i18n/ui";
 import { DiagramView } from "@/components/diagram/diagram";
 
 export function ProjectDetailView({
@@ -55,8 +56,18 @@ export function ProjectDetailView({
       ))}
 
       <p className="mt-7 border-t border-line pt-4 font-mono text-xs text-muted">
-        {project.techStack.join(" / ")}
+        {(project.roles ?? project.techStack).join(" / ")}
       </p>
+      {project.bookUrl && (
+        <a
+          href={project.bookUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="mt-4 inline-block text-sm font-semibold text-accent transition-colors hover:text-ink"
+        >
+          {ui[locale].projects.book}
+        </a>
+      )}
     </div>
   );
 }

@@ -33,6 +33,7 @@ function CardBody({
     { url: project.githubUrl, label: dict.code },
     { url: project.demoUrl, label: dict.demo },
     { url: project.paperUrl, label: dict.paper },
+    { url: project.bookUrl, label: dict.book },
   ].filter((l): l is { url: string; label: string } => Boolean(l.url));
 
   return (
@@ -51,7 +52,7 @@ function CardBody({
       <p className="row-start-3 mt-3 text-sm leading-relaxed text-muted">{project.description}</p>
       {project.impact && <p className="row-start-4 mt-3 text-sm font-medium">{project.impact}</p>}
       <p className="row-start-5 mt-4 self-end font-mono text-xs text-muted">
-        {project.techStack.join(" / ")}
+        {(project.roles ?? project.techStack).join(" / ")}
       </p>
       <div className="row-start-6 mt-5 flex gap-4 self-end border-t border-line pt-4 text-sm">
         {action ??

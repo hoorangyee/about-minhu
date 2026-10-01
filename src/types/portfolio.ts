@@ -60,6 +60,8 @@ export interface Project {
   /** 성과·역할이 드러나는 한 줄 (선택) */
   impact?: string;
   techStack: string[];
+  roles?: string[];
+  bookUrl?: string;
   githubUrl?: string;
   demoUrl?: string;
   paperUrl?: string;
