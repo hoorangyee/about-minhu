@@ -87,13 +87,13 @@ export const projects: Project[] = [
     title: "Korean Architecture: A Prediction Model",
     slug: "architecture-prediction-model",
     group: "personal",
-    context: "Joint entry with an architecture teammate · Concept & narrative development",
+    context: "Joint entry with an architecture teammate · Problem framing & argument development",
     period: "2026",
     description:
-      "An interdisciplinary architecture project imagining a future where AI predictions shape spaces, and behavior in those spaces feeds back into the predictions. I contributed to the AI and prediction concepts and the narrative, asking how lives never chosen can disappear from the data.",
+      "A collaborative work imagining a future where behavior in spaces shaped by AI predictions reinforces those predictions. I helped frame the question of how lives never chosen can disappear from the data, structure the feedback-loop argument, and review the narrative and presentation.",
     impact: "2026 젊은 건축가포럼 건축상 · Selected Entry",
     techStack: [],
-    roles: ["Concept Development", "AI / Prediction Concepts", "Narrative Development", "Interdisciplinary Collaboration"],
+    roles: ["Problem Framing", "Feedback-Loop Argument", "Narrative & Presentation Review"],
     bookUrl: "https://a5124-architecture-book.vercel.app",
   },
 ];

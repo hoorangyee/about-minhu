@@ -2,7 +2,7 @@ import type { ProjectDetail } from "@/types/portfolio";
 
 export const projectDetails: Record<string, ProjectDetail> = {
   "architecture-prediction-model": {
-    lead: "A joint entry with an architecture teammate. I contributed from a CS/AI perspective to the core idea, prediction-system concepts, narrative, and presentation logic. My architecture teammate led the architectural design.",
+    lead: "A joint competition entry exploring how AI predictions affect human choice and space. From a CS/AI perspective, I helped frame the question, structure the feedback-loop argument, and review the narrative and presentation. My teammate primarily connected the work to architectural discourse and history and developed its visualizations.",
     sections: [
       {
         heading: "The question",
@@ -20,8 +20,8 @@ export const projectDetails: Record<string, ProjectDetail> = {
       {
         heading: "My role and collaboration",
         body: [
-          "I helped clarify the core idea and problem framing, develop the AI and prediction-system concepts, and structure the feedback-loop argument. Working with my architecture teammate, I reviewed the narrative and presentation logic and provided feedback.",
-          "The collaboration brought a developer’s understanding of data and system feedback into architecture. My contribution was to examine the relationship between observed behavior and the choices an environment allows, and explain the conditions under which a technology operates and affects people.",
+          "I helped clarify the core idea and problem framing and structure the feedback-loop argument connecting prediction, space, behavior, and data. I reviewed how that argument carried through the narrative and presentation and provided feedback.",
+          "My teammate primarily connected the question to architectural discourse and history and developed the visualizations. Bringing our perspectives together, we extended technical thinking about data and system feedback into architectural questions.",
         ],
       },
       {
