@@ -8,20 +8,9 @@ export const projects: Project[] = [
     context: "스마트닥터 · 담당 모듈 설계·구현, 실행 기반까지",
     period: "2025 — 현재",
     description:
-      "데스크톱 CRM의 핵심 화면을 웹(React)으로 옮기는 장기 마이그레이션. 월 단위 예약 캘린더 화면을 시작으로 담당 모듈의 설계와 구현을 수행했고, 월 전체 일괄 조회를 주 단위 병렬 요청으로 나눠 서버의 날짜 범위별 캐시를 활용하도록 했습니다. 웹이 데스크톱 안 웹뷰로 실행되는 구조여서 인증(refresh token)·네이티브 브릿지·WebView2 런타임 배포 같은 실행 기반을 함께 만들었고, 후반에는 'API 신설 → 독립 웹 앱 → 웹뷰 임베드' 패턴을 확립해 데스크톱 전용 화면 3종을 이식했습니다.",
+      "데스크톱 CRM의 예약·진료 화면을 웹으로 옮기는 장기 전환 프로젝트입니다. 예약 캘린더와 진료 기록 화면을 설계·구현하고, 인증·네이티브 브릿지·WebView2 런타임 배포까지 함께 구축했습니다. 이후 'API 신설 → 독립 웹 앱 → 웹뷰 임베드' 패턴을 확립해 데스크톱 전용 화면 3종을 이식했습니다.",
     impact: "웹·API·데스크톱 3개 코드베이스에 걸친 크로스 스택 개발",
     techStack: ["React", "TypeScript", "Zustand", "Kotlin", "C#", "WebView2"],
-  },
-  {
-    title: "진료 기록 화면 신규 구축",
-    slug: "clinical-record-screen",
-    group: "work",
-    context: "스마트닥터 · 웹 전환 최대 모듈",
-    period: "2026",
-    description:
-      "상병(진단명)·처방 입력, 진료비·진찰료 산정, 시술권 사용 처리, 진료 기록 저장까지 담는 진료 화면을 웹에 새로 구축했습니다. 처방코드 자동완성(입력 디바운싱), 진찰료 자동 산정·해제, 저장 버튼 연타로 인한 중복 생성 방지, form을 단일 진실 원천으로 만드는 리팩터링 등 세밀한 입력 UX와 데이터 정합성을 모두 다뤘습니다.",
-    impact: "처방 입력부터 DUR 점검·저장까지 하나의 업무 흐름으로 구축",
-    techStack: ["React", "TypeScript", "Kotlin", "WebView2"],
   },
   {
     title: "콜센터 상담 관리 시스템",
@@ -57,16 +46,6 @@ export const projects: Project[] = [
     techStack: ["C#", ".NET", "WPF", "IPC", "Sentry"],
   },
   {
-    title: "DUR(의약품 안전 점검) 연동과 검증 도구",
-    slug: "dur-integration",
-    group: "work",
-    context: "스마트닥터 · 웹·백엔드 연동 + 자체 검증 CLI",
-    period: "2026",
-    description:
-      "진료 화면에서 처방·상병 정보로 심평원(HIRA)의 의약품 안전 점검을 수행하는 기능을 웹 팝업부터 백엔드 브로커 연동까지 구축했습니다. 처방전 내 모든 점검 종류를 구현하고, 점검 응답을 케이스(YAML) 기반으로 자동 검증하는 CLI 도구를 직접 만들어 외부 연동의 정확성을 회귀 검증할 수 있게 했습니다.",
-    techStack: ["Kotlin", "React", "AWS S3", "SQLite"],
-  },
-  {
     title: "배포 알림 릴레이",
     slug: "deploy-notifier",
     group: "work",
@@ -76,17 +55,6 @@ export const projects: Project[] = [
       "상용 핫픽스가 실제로 나갔는지를 각자 확인해야 하던 부담을 줄이려고 만든 사내 도구. 배포 웹훅을 받아 직전 배포와의 커밋 범위를 비교하고, 거기 담긴 이슈 키로 Jira에 연결된 Slack 스레드를 찾아 배포 완료를 답글로 남깁니다. 정기 릴리즈까지 알리면 소음이 될 것으로 보고 핫픽스성 배포만 골라내며, 판별에 필요한 정보가 없으면 잘못 알리는 대신 침묵하고 경고 로그만 남깁니다.",
     impact: "요청받지 않고 만들어 팀 운영에 정착",
     techStack: ["TypeScript", "Vercel Functions", "Slack API", "Jira API"],
-  },
-  {
-    title: "캐시닥 병원 CMS 모바일 화면",
-    slug: "cashdoc-mobile",
-    group: "work",
-    context: "스마트닥터 · 사내 별도 서비스",
-    period: "2026",
-    description:
-      "모바일 화면 전체를 새로 만들어, 병원 관리자가 PC 앞에 없어도 예약 확정, 상담 응대, 후기 답변 같은 일상 운영을 처리할 수 있게 했습니다. 홈·예약·상담·후기·알림함·설정을 공용 UI 킷 위에 올렸고, 신규 상담이 들어오면 알림함에 쌓이도록 스키마·API·프런트·적재를 네 개 저장소에 걸쳐 연결했습니다.",
-    impact: "제품군을 넘나드는 개발까지 담당 범위 확장",
-    techStack: ["Next.js", "TypeScript", "GraphQL", "Prisma"],
   },
   {
     title: "LRAGE — 법률 도메인 RAG 평가 툴킷",

@@ -51,6 +51,19 @@ export const projectDetails: Record<string, ProjectDetail> = {
         ],
       },
       {
+        heading: "Representative module: clinical records and data integrity",
+        body: [
+          "I built the clinical records screen, the largest module I owned in the web migration, connecting diagnosis and prescription entry, fee calculation, treatment-pass usage, and saving. A duplicate-save guard and a form refactor that established a single source of truth resolved repeated-save and popup-state issues.",
+        ],
+      },
+      {
+        heading: "External integration and a verification tool",
+        body: [
+          "I integrated HIRA drug-utilization review (DUR) into the prescription-save flow, building both the web review popup and the backend broker integration. The workflow issues a confirmation number, runs the checks, handles the results, and proceeds to saving.",
+          "Since results exchanged with an external server were hard to verify visually, I built a separate dur-conformance CLI. It replays the same call path as the integration and automatically compares responses from YAML-defined cases against expected results. It was run manually after changes to outbound messages or review logic, rather than connected to CI.",
+        ],
+      },
+      {
         heading: "Establishing a pattern",
         body: [
           "Later in the migration I settled on a repeatable pattern — add the API, build a standalone web app, embed it in the desktop webview — and applied it to three more desktop-only screens: assignment inquiry, the clinic status board, and the reception/wait-status board. Building the API first and the web app in isolation before wiring it into the desktop webview kept all three ports fast and consistent.",
@@ -60,35 +73,6 @@ export const projectDetails: Record<string, ProjectDetail> = {
         heading: "Polling during persistent failures",
         body: [
           "Added longer polling intervals after consecutive failures. Screens with a 60-second base interval switch to 300 seconds after three consecutive failures. In the sustained-failure state, scheduled polling frequency falls from 60 to 12 times per hour (80%). This is calculated from the configured intervals, not measured production traffic.",
-        ],
-      },
-    ],
-  },
-
-  "clinical-record-screen": {
-    lead: "Built a new clinical records screen inside the reservation-info panel, covering diagnosis and prescription entry through fee calculation and saving. It was the largest single module I owned in the migration.",
-    sections: [
-      {
-        heading: "Background",
-        body: [
-          "Inside the reservation-info panel sits the record-entry screen: diagnosis codes and prescriptions, consultation-fee and exam-fee calculation, treatment-pass usage, and saving the record itself. I rebuilt the full workflow on the web, from prescription entry to saving.",
-          "Because the screen deals directly with prescriptions and diagnoses, integrating DUR — Korea's HIRA drug-utilization review — came along naturally while building it. The check runs as two calls: issue a confirmation number, then run the review. When nothing is flagged, saving proceeds without a popup; when something is flagged, the check result surfaces first. I wired this into the save gate.",
-        ],
-      },
-      {
-        heading: "What I built",
-        body: [
-          "I built several input-assist features around diagnosis and prescription entry. Prescription-code autocomplete debounces input and sorts search results, and shows group-order and treatment-pass status through icons and tooltips. Entering a duplicate diagnosis code triggers a warning, and deleting a code also clears its fee assignment.",
-          "The save pipeline consolidates onto a single save API and chains into payment completion once a save succeeds. Consultation and symptom notes save as RTF.",
-          "Since the screen runs inside a desktop webview, I also handled the embedding: passing customer and reservation IDs as query parameters, syncing the URL when the customer changes, optimizing WebView2 memory usage, and gating exposure behind a QA-only flag for a staged rollout.",
-          "In March 2026 I addressed scrolling, layout, tooltip, and focus issues found in QA, and marked records saved from NC (the in-house EMR) as read-only. Later QA rounds covered insurance-change handling, missing exam fees, blocking zero-amount payments on already-completed records, and auto-filling group-order prescription attributes and statement notes.",
-        ],
-      },
-      {
-        heading: "What was tricky",
-        body: [
-          "Clicking the save button repeatedly could create duplicate records for the same visit. I added a dedupe guard to the save gate to stop it.",
-          "The provider-assignment popup (doctor, counselor, assistant) had its state scattered across several places, so values wouldn't hold correctly across opening and closing it. I fixed this with a refactor that made the form the single source of truth.",
         ],
       },
     ],
@@ -187,33 +171,6 @@ export const projectDetails: Record<string, ProjectDetail> = {
     ],
   },
 
-  "dur-integration": {
-    lead: "Building the reservation-info panel's new 'record entry' tab included DUR — Korea's HIRA drug-utilization review — integration end to end, from the web popup through the backend broker. Since it's an external integration that's hard to eyeball, I also built a separate CLI that replays the call path and auto-checks responses against declared cases.",
-    sections: [
-      {
-        heading: "Background",
-        body: [
-          "The reservation-info panel's new 'record entry' tab brought prescription and diagnosis entry together with the rest of the existing EMR feature set, and DUR integration came along as a natural part of building it — HIRA's (Health Insurance Review & Assessment Service) drug-utilization review, which flags interactions and duplicate prescriptions. There was no separate HIRA certification or review process involved; it was a fresh integration built from scratch.",
-        ],
-      },
-      {
-        heading: "What I built",
-        body: [
-          "On the web I built a new DUR check popup slice: issue a confirmation number, then run the check, as two calls. Results render in a table, reasons can be entered and sent in bulk, and the whole thing is wired into the save gate — when nothing is flagged, saving proceeds with no popup at all.",
-          "On the backend I built the broker connection to HIRA from scratch. I moved a hardcoded 38-character auth code to a dynamic database lookup, implemented every check type that can appear on a prescription, and unified the outgoing message format. Interaction checks run against a master database loaded from S3 (SQLite packed in a zip), and daily maximum dosage for capacity-warning items is normalized to active-ingredient milligrams. I added a check-cancellation endpoint and made the reference database's version follow whatever version was actually loaded, instead of a fixed value.",
-          "I kept fixing what surfaced once the integration was in. Deleting a record now also triggers DUR cancellation, so the HIRA-side check entry doesn't linger. I added a resubmit path for check response codes 53004 through 53008, aligned the invariant that the DUR confirmation number and the outside-prescription issuance number must match with how NC (the in-house EMR) handles it, and fixed an infinite loop in issuance-number generation caused by a date-max lookup that didn't match its own LIKE condition. Daily dosage now accepts fractional values, and I removed a spot where a single dose was being split and calculated twice.",
-        ],
-      },
-      {
-        heading: "Why a separate verification tool",
-        body: [
-          "DUR checks are a real call to a HIRA server and back, so looking at the screen alone couldn't tell me whether a given response was actually correct.",
-          "So I built a separate CLI, dur-conformance, in its own repo. It replays the same confirmation-number and check calls the CRM makes, runs the cases declared in YAML one by one, compares each response against its expected values, and writes a report. It isn't wired into CI; I ran it by hand after reworking the outgoing message format or the check logic.",
-        ],
-      },
-    ],
-  },
-
   "deploy-notifier": {
     lead: "A tool I built on my own, unasked, to remove the need for everyone to individually check whether a production deploy actually went out. It pulls the commit range from a deploy webhook, finds the Slack thread tied to each issue, and replies there — narrowed down to hotfixes only, and still in active use today.",
     sections: [
@@ -241,31 +198,4 @@ export const projectDetails: Record<string, ProjectDetail> = {
     ],
   },
 
-  "cashdoc-mobile": {
-    lead: "Built a new mobile operations screen for Cashdoc's clinic event CMS, an in-house service separate from SmartDoctor. Alongside the screens themselves, I widened a data structure across four repositories so consultation notifications, which had nowhere to land before, could join reservation alerts in the same inbox.",
-    sections: [
-      {
-        heading: "Background",
-        body: [
-          "Cashdoc is a separate in-house service from the SmartDoctor CRM, and its clinic event CMS had no mobile operations screen. I was pulled onto building one during this period and have kept owning it since. Clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — from a phone, without being at a PC.",
-        ],
-      },
-      {
-        heading: "Screens built",
-        body: [
-          "I stood up the `/mobile` route and shell, built a shared UI kit — bottom sheets, confirmation sheets, list-state components — and hung the screens off it. A home dashboard (today's tasks) leads, and reservations split into a list (date-range and status-chip filters, search, inline confirm), a detail view (confirm, cancel, mark visited), and new-reservation creation. Consultations got an applicant list and detail view (status changes, notes, SMS); reviews got a reviews-and-Q&A list with a reply screen. On top of that sit the notification inbox (list, read state, deep links) and the catch-all covering announcements, clinic-profile completeness, and logout — the full set a mobile operator needs.",
-          "I matched the design against a demo prototype as I built out each real screen, and added a trigger that routes mobile-device visitors straight to the mobile screens. Reservation lookups were aligned to the same filter model as the PC reservation-management screen, with counts driven off the current query results, and I worked through a run of mobile-specific rough edges: counts flickering to empty on every filter change, a horizontal scroll strip getting clipped at the screen edge, and the page starting zoomed in on first load.",
-          "I also touched the build environment to stop Vercel builds from dying with out-of-memory errors — lowering the build worker count and raising the dev server's heap limit.",
-        ],
-      },
-      {
-        heading: "Widening the notification inbox",
-        body: [
-          "The inbox only ever held reservation notifications; consultation notifications had no home on any server at all. That wasn't a screen-level bug to patch — it was a structural gap in where the data could even go — and fixing it touched four repositories.",
-          "Rather than build a new event or delivery path just for consultations, I added one more branch onto the existing `ApplicantCreated` domain event. On the storage side, I extended the table that used to hold only reservation alerts so it could carry both kinds, and enforced with a CHECK constraint that exactly one of its two foreign keys gets filled, so reservation and consultation notifications can't get mixed up.",
-          "I split the deploy into four steps, in this order: schema, then API, then frontend, then the ingestion that actually writes consultation data. The first three ship with no consultation data flowing yet, so stopping anywhere in that sequence leaves the screen behaving exactly as it did before. Only the last step, ingestion, starts writing rows into the inbox table — which means rolling back is just flipping that one switch back off.",
-        ],
-      },
-    ],
-  },
 };

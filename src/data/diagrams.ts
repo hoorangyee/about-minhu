@@ -25,31 +25,6 @@ export const diagrams: Record<string, Diagram> = {
     },
   },
 
-  "clinical-record-screen": {
-    nodes: [
-      { id: "code", col: 0, row: 0, label: { ko: "처방코드 자동완성", en: "Code autocomplete" }, sublabel: { ko: "입력 디바운싱", en: "debounced input" } },
-      { id: "form", col: 1, row: 0, tone: "accent", label: { ko: "폼 상태", en: "Form state" }, sublabel: { ko: "단일 진실 원천", en: "single source" } },
-      { id: "gate", col: 2, row: 0, tone: "accent", label: { ko: "저장 게이트", en: "Save gate" }, sublabel: { ko: "중복 저장 방지", en: "dedupe guard" } },
-      { id: "api", col: 3, row: 0, label: { ko: "진료 저장 API", en: "Record API" } },
-      { id: "fee", col: 0, row: 1, label: { ko: "진찰료 자동 산정", en: "Fee calculation" } },
-      { id: "dur", col: 2, row: 1, label: { ko: "DUR 점검", en: "DUR check" } },
-    ],
-    edges: [
-      { from: "code", to: "form" },
-      { from: "fee", to: "form" },
-      { from: "form", to: "gate", label: { ko: "검증", en: "validate" } },
-      { from: "gate", to: "dur", label: { ko: "이상 시", en: "if flagged" } },
-      { from: "gate", to: "api", label: { ko: "저장", en: "save" } },
-    ],
-    groups: [
-      { members: ["form", "gate"], tone: "accent", label: { ko: "신규 구축", en: "Newly built" } },
-    ],
-    caption: {
-      ko: "입력 보조 기능들이 폼 상태 하나로 모이고, 저장 게이트가 검증과 중복 방지를 거쳐 API로 보냅니다. 처방에 이상이 있으면 DUR 점검 결과를 먼저 띄웁니다.",
-      en: "Input helpers converge on a single form state, and a save gate runs validation and dedupe before calling the API. Flagged prescriptions surface a DUR check first.",
-    },
-  },
-
   "call-center-crm": {
     nodes: [
       { id: "cti", col: 0, row: 0, label: { ko: "CTI 미들웨어", en: "CTI middleware" }, sublabel: { ko: "전화 연동", en: "telephony" } },
@@ -127,35 +102,6 @@ export const diagrams: Record<string, Diagram> = {
     },
   },
 
-  "dur-integration": {
-    nodes: [
-      { id: "web", col: 0, row: 0, label: { ko: "진료 화면", en: "Clinical screen" }, sublabel: { ko: "처방·상병", en: "Rx · diagnosis" } },
-      { id: "api", col: 1, row: 0, tone: "accent", label: { ko: "DUR API", en: "DUR API" }, sublabel: { ko: "Kotlin", en: "Kotlin" } },
-      { id: "broker", col: 2, row: 0, tone: "accent", label: { ko: "연동 브로커", en: "Broker" } },
-      { id: "hira", col: 3, row: 0, label: { ko: "심평원", en: "HIRA" }, sublabel: { ko: "국가 점검 체계", en: "national registry" } },
-      /*
-       * cli를 col0·row1에 두는 이유: api로 가는 간선의 수직 구간이 col0·col1 사이
-       * 빈 통로를 지나며, 이 통로는 accent 그룹(api·broker) 경계 바깥이라 관통하지 않습니다.
-       */
-      { id: "cli", col: 0, row: 1, tone: "accent", label: { ko: "검증 CLI", en: "Verification CLI" }, sublabel: { ko: "케이스 기반", en: "case-driven" } },
-      { id: "master", col: 1, row: 1, label: { ko: "기준 DB", en: "Reference DB" }, sublabel: { ko: "병용금기 목록", en: "interaction data" } },
-    ],
-    edges: [
-      { from: "web", to: "api", label: { ko: "점검 요청", en: "check" } },
-      { from: "api", to: "broker" },
-      { from: "broker", to: "hira", dir: "both" },
-      { from: "master", to: "api", label: { ko: "적재", en: "loads" } },
-      { from: "cli", to: "api", style: "dashed", label: { ko: "회귀 검증", en: "regression" } },
-    ],
-    groups: [
-      { members: ["api", "broker"], tone: "accent", label: { ko: "직접 구축", en: "Built by me" } },
-    ],
-    caption: {
-      ko: "처방과 상병을 심평원 점검 체계에 보내 병용금기 등을 확인합니다. 외부 연동은 눈으로 확인하기 어려워, 같은 호출 경로를 재현해 기대값과 대조하는 검증 도구를 따로 만들었습니다.",
-      en: "Prescriptions and diagnoses are checked against the national drug-safety registry. Since external integrations are hard to eyeball, I built a separate tool that replays the same call path and compares against expected results.",
-    },
-  },
-
   "deploy-notifier": {
     nodes: [
       { id: "deploy", col: 0, row: 0, label: { ko: "배포 플랫폼", en: "Deploy platform" }, sublabel: { ko: "웹훅", en: "webhook" } },
@@ -183,26 +129,4 @@ export const diagrams: Record<string, Diagram> = {
     },
   },
 
-  "cashdoc-mobile": {
-    nodes: [
-      { id: "user", col: 0, row: 0, label: { ko: "이용자", en: "Consumer" }, sublabel: { ko: "상담 신청", en: "applies" } },
-      { id: "platform", col: 1, row: 0, label: { ko: "예약 플랫폼", en: "Booking platform" }, sublabel: { ko: "도메인 이벤트", en: "domain event" } },
-      { id: "inbox", col: 2, row: 0, tone: "accent", label: { ko: "알림함", en: "Notification inbox" }, sublabel: { ko: "예약+상담 통합", en: "unified" } },
-      { id: "mobile", col: 3, row: 0, tone: "accent", label: { ko: "모바일 CMS", en: "Mobile CMS" }, sublabel: { ko: "관리자 화면", en: "admin UI" } },
-      { id: "schema", col: 2, row: 1, label: { ko: "알림 스키마", en: "Inbox schema" }, sublabel: { ko: "마이그레이션", en: "migration" } },
-    ],
-    edges: [
-      { from: "user", to: "platform", label: { ko: "신청", en: "submit" } },
-      { from: "platform", to: "inbox", label: { ko: "적재", en: "records" } },
-      { from: "inbox", to: "mobile", label: { ko: "조회", en: "reads" } },
-      { from: "schema", to: "inbox", style: "dashed" },
-    ],
-    groups: [
-      { members: ["inbox", "mobile"], tone: "accent", label: { ko: "이번 작업 범위", en: "This work" } },
-    ],
-    caption: {
-      ko: "상담 신청이 들어오면 기존 도메인 이벤트에 한 갈래를 더해 알림함에 쌓습니다. 새 이벤트나 전달 경로를 만들지 않았고, 예약 알림만 담던 테이블을 확장해 두 종류를 한곳에서 다룹니다.",
-      en: "A new consultation adds one more branch to an existing domain event so it lands in the inbox. No new event or delivery path was introduced; the table that held only booking alerts was extended to carry both kinds.",
-    },
-  },
 };

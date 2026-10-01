@@ -14,20 +14,9 @@ export const projects: Project[] = [
     context: "SmartDoctor · Module design & implementation, plus the runtime foundation",
     period: "2025 — Present",
     description:
-      "A long-running migration of the desktop CRM's core screens to the web (React). Starting with the monthly reservation calendar, I designed and built my modules and split month-wide fetches into parallel weekly requests that can reuse the server’s date-range cache. Because the web app runs inside a desktop webview, I also built the runtime foundation — authentication (refresh tokens), the native bridge, and WebView2 runtime deployment. Later I established an 'add API → standalone web app → webview embed' pattern and ported three desktop-only screens.",
+      "A long-running migration of the desktop CRM's reservation and clinical screens to the web. I designed and built the reservation calendar and clinical records screen, alongside authentication, the native bridge, and WebView2 runtime deployment. I then established an 'add API → standalone web app → webview embed' pattern and ported three desktop-only screens.",
     impact: "Cross-stack development spanning the web, API, and desktop codebases",
     techStack: ["React", "TypeScript", "Zustand", "Kotlin", "C#", "WebView2"],
-  },
-  {
-    title: "Clinical Records Screen",
-    slug: "clinical-record-screen",
-    group: "work",
-    context: "SmartDoctor · The largest module in the web migration",
-    period: "2026",
-    description:
-      "Built a new clinical records screen covering diagnosis and prescription input, consultation-fee calculation, treatment-pass usage, and record saving. Handled fine-grained input UX and data integrity together: prescription autocomplete with input debouncing, automatic consultation-fee assignment and release, guards against duplicate saves from repeated clicks, and a refactor that made the form the single source of truth.",
-    impact: "Connected prescription entry, DUR checks, and saving in one workflow",
-    techStack: ["React", "TypeScript", "Kotlin", "WebView2"],
   },
   {
     title: "Call Center Consultation Management",
@@ -63,16 +52,6 @@ export const projects: Project[] = [
     techStack: ["C#", ".NET", "WPF", "IPC", "Sentry"],
   },
   {
-    title: "DUR (Drug Safety Review) Integration & Verification Tool",
-    slug: "dur-integration",
-    group: "work",
-    context: "SmartDoctor · Web + backend, plus a purpose-built verification CLI",
-    period: "2026",
-    description:
-      "Built the drug-utilization-review flow that checks prescriptions and diagnoses against HIRA (Korea's health-insurance review agency), from the web popup to the backend broker integration. Implemented every check type for prescriptions and wrote a case-based (YAML) CLI tool that checks the integration for regressions.",
-    techStack: ["Kotlin", "React", "AWS S3", "SQLite"],
-  },
-  {
     title: "Deploy Notification Relay",
     slug: "deploy-notifier",
     group: "work",
@@ -82,17 +61,6 @@ export const projects: Project[] = [
       "An internal tool built to cut down on everyone individually checking whether a production hotfix actually shipped. It listens for deploy webhooks, diffs the commit range against the previous deploy, and posts a completion reply on the Slack thread linked to whatever Jira issue keys show up in those commits. I judged that notifying on regular releases too would likely become noise, so it picks out hotfix-shaped deploys only, and when it doesn't have enough information to tell, it stays silent and logs a warning rather than risk a false report.",
     impact: "Built without being asked, and now a fixture of how the team operates",
     techStack: ["TypeScript", "Vercel Functions", "Slack API", "Jira API"],
-  },
-  {
-    title: "Cashdoc Clinic CMS Mobile Screens",
-    slug: "cashdoc-mobile",
-    group: "work",
-    context: "SmartDoctor · A separate in-house service",
-    period: "2026",
-    description:
-      "Rebuilt the mobile screens from the ground up so clinic admins can handle day-to-day operations — confirming reservations, responding to consultations, replying to reviews — without being at a PC. Home, reservations, consultations, reviews, notifications, and settings all sit on a shared UI kit, and I connected the schema, API, frontend, and data pipeline across four repositories so new consultations land in the notification inbox automatically.",
-    impact: "Expanded my scope into development that crosses product lines",
-    techStack: ["Next.js", "TypeScript", "GraphQL", "Prisma"],
   },
   {
     title: "LRAGE — Legal-Domain RAG Evaluation Toolkit",
