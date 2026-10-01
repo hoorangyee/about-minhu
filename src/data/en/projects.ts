@@ -52,6 +52,17 @@ export const projects: Project[] = [
     techStack: ["C#", ".NET", "WPF", "IPC", "Sentry"],
   },
   {
+    title: "Cloud Code Signing Migration & Shared CI for Windows Apps",
+    slug: "windows-code-signing",
+    group: "work",
+    context: "SmartDoctor · Shared signing CI for internal Windows apps",
+    period: "2026.08–09",
+    description:
+      "Migrated Windows code signing to DigiCert KeyLocker in the cloud to address the management overhead and CI/CD constraints of physical USB authentication. Built a shared GitHub action for signing and verification that internal Windows apps can reuse in their existing build pipelines, and shared usage guidance with the team.",
+    impact: "Reusable cloud code-signing CI across apps without physical USB dependence",
+    techStack: ["GitHub Actions", "PowerShell", "DigiCert KeyLocker"],
+  },
+  {
     title: "Deploy Notification Relay",
     slug: "deploy-notifier",
     group: "work",

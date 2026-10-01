@@ -46,6 +46,17 @@ export const projects: Project[] = [
     techStack: ["C#", ".NET", "WPF", "IPC", "Sentry"],
   },
   {
+    title: "클라우드 코드 서명 전환과 Windows 앱 공용 CI 구축",
+    slug: "windows-code-signing",
+    group: "work",
+    context: "스마트닥터 · 사내 Windows 앱을 위한 공용 서명 CI 구축",
+    period: "2026.08–09",
+    description:
+      "물리 USB 인증 장치의 관리 부담과 CI/CD 자동화 제약을 해결하기 위해 Windows 코드 서명을 DigiCert KeyLocker 기반 클라우드 방식으로 전환했습니다. 사내 Windows 앱들의 기존 빌드 CI에서 재사용할 수 있도록 서명·검증 절차를 공용 GitHub Action으로 구축하고 팀에 사용 기준을 공유했습니다.",
+    impact: "물리 USB 의존 없이 여러 앱에서 재사용하는 클라우드 코드 서명 CI",
+    techStack: ["GitHub Actions", "PowerShell", "DigiCert KeyLocker"],
+  },
+  {
     title: "배포 알림 릴레이",
     slug: "deploy-notifier",
     group: "work",

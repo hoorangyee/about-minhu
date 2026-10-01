@@ -171,6 +171,20 @@ export const projectDetails: Record<string, ProjectDetail> = {
     ],
   },
 
+  "windows-code-signing": {
+    lead: "Migrated to cloud code signing to address the management overhead and CI/CD constraints of physical USB authentication. Built a shared DigiCert KeyLocker CI process so internal Windows apps can use the same signing and verification procedure.",
+    sections: [
+      {
+        heading: "Background and role",
+        body: [
+          "The existing code-signing process depended on a physical USB authentication device. Managing the device and connecting it to the signing environment created operational overhead and constrained automated build-and-sign flows in CI/CD. I migrated signing to DigiCert KeyLocker in the cloud to address those constraints.",
+          "Built a shared GitHub action that Windows apps built with .NET, Electron, or Tauri can reuse for signing and verification. Each repository can integrate it into its existing build CI by adding an action call and specifying the files to sign.",
+          "Standardized signing and verification for EXE, DLL, and MSI files and provided a manual signing tool so local files and folders can use the same cloud signing procedure. Shared usage instructions and guidance for avoiding unnecessary signing calls with the team.",
+        ],
+      },
+    ],
+  },
+
   "deploy-notifier": {
     lead: "A tool I built on my own, unasked, to remove the need for everyone to individually check whether a production deploy actually went out. It pulls the commit range from a deploy webhook, finds the Slack thread tied to each issue, and replies there — narrowed down to hotfixes only, and still in active use today.",
     sections: [
