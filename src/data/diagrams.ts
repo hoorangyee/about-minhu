@@ -2,6 +2,44 @@ import type { Diagram } from "@/types/portfolio";
 
 /** 로케일 공용. 기하는 한 벌만 두고 라벨만 이중어를 갖습니다 */
 export const diagrams: Record<string, Diagram> = {
+  lrage: {
+    nodes: [
+      { id: "retrieve", col: 0, row: 0, tone: "accent", label: { ko: "문서 검색", en: "Retrieval" }, sublabel: { ko: "Corpus · Retriever", en: "Corpus · Retriever" } },
+      { id: "rerank", col: 1, row: 0, tone: "accent", label: { ko: "Reranking", en: "Reranking" } },
+      { id: "generate", col: 2, row: 0, tone: "accent", label: { ko: "응답 생성", en: "Generation" }, sublabel: { ko: "언어 모델", en: "Language model" } },
+      { id: "evaluate", col: 2, row: 1, tone: "accent", label: { ko: "응답 평가", en: "Evaluation" }, sublabel: { ko: "지표 · 문항별 기준", en: "Metrics · Rubrics" } },
+      { id: "analyze", col: 1, row: 1, tone: "accent", label: { ko: "결과 분석", en: "Analysis" }, sublabel: { ko: "실행 비교 · 문항 검토", en: "Runs · Samples" } },
+    ],
+    edges: [
+      { from: "retrieve", to: "rerank" },
+      { from: "rerank", to: "generate" },
+      { from: "generate", to: "evaluate" },
+      { from: "evaluate", to: "analyze" },
+    ],
+    caption: {
+      ko: "검색·Reranking·언어 모델·평가 기준을 바꾸며 실험하고, 웹 UI에서 실행 간 지표와 문항별 결과를 비교합니다. Reranking은 선택적으로 사용합니다.",
+      en: "Vary retrieval, optional reranking, the language model, and evaluation criteria, then compare run metrics and inspect individual samples in the web UI.",
+    },
+  },
+  woodshed: {
+    nodes: [
+      { id: "input", col: 0, row: 1, label: { ko: "그래픽 에디터", en: "Graphic editor" }, sublabel: { ko: "입력 · 이동 · 조옮김", en: "Input · Transpose" } },
+      { id: "tab", col: 1, row: 1, tone: "accent", label: { ko: "TAB 데이터", en: "TAB data" }, sublabel: { ko: "줄 · 프렛 · 연주 기법", en: "String · Fret · Technique" } },
+      { id: "staff", col: 2, row: 0, label: { ko: "악보 미리보기", en: "Notation" } },
+      { id: "ascii", col: 2, row: 1, label: { ko: "ASCII TAB", en: "ASCII TAB" } },
+      { id: "audio", col: 2, row: 2, label: { ko: "소리 재생", en: "Audio playback" }, sublabel: { ko: "Web Audio", en: "Web Audio" } },
+    ],
+    edges: [
+      { from: "input", to: "tab" },
+      { from: "tab", to: "staff" },
+      { from: "tab", to: "ascii" },
+      { from: "tab", to: "audio" },
+    ],
+    caption: {
+      ko: "에디터가 변경한 TAB 데이터를 악보·텍스트 복사·재생이 함께 사용합니다. 조옮김도 같은 데이터를 바꾸므로 각 표현에 함께 반영합니다.",
+      en: "Notation, text export, and playback share the TAB data updated by the editor. Transposition updates that same data, so every representation reflects the change.",
+    },
+  },
   "crm-web-migration": {
     nodes: [
       { id: "native", col: 0, row: 0, label: { ko: "데스크톱 CRM", en: "Desktop CRM" }, sublabel: { ko: "C# · WPF", en: "C# · WPF" } },

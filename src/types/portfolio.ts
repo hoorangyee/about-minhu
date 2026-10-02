@@ -84,6 +84,13 @@ export interface ProjectDetail {
   /** 모달 상단 한 줄 요약 */
   lead: string;
   sections: DetailSection[];
+  screenshot?: {
+    src: string;
+    width: number;
+    height: number;
+    alt: string;
+    caption: string;
+  };
 }
 
 export interface DiagramNode {

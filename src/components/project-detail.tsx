@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Diagram, Project, ProjectDetail } from "@/types/portfolio";
 import type { Locale } from "@/i18n/config";
 import { ui } from "@/i18n/ui";
@@ -16,6 +17,14 @@ export function ProjectDetailView({
   locale: Locale;
   titleId: string;
 }) {
+  const dict = ui[locale].projects;
+  const links = [
+    { url: project.githubUrl, label: dict.code },
+    { url: project.demoUrl, label: dict.demo },
+    { url: project.paperUrl, label: dict.paper },
+    { url: project.bookUrl, label: dict.book },
+  ].filter((link): link is { url: string; label: string } => Boolean(link.url));
+
   return (
     <div>
       <div>
@@ -55,18 +64,39 @@ export function ProjectDetailView({
         </section>
       ))}
 
+      {detail.screenshot && (
+        <figure className="mt-7">
+          <Image
+            src={detail.screenshot.src}
+            width={detail.screenshot.width}
+            height={detail.screenshot.height}
+            alt={detail.screenshot.alt}
+            sizes="(max-width: 736px) calc(100vw - 5rem), 672px"
+            className="h-auto w-full rounded-lg border border-line"
+          />
+          <figcaption className="mt-3 text-xs leading-relaxed text-muted">
+            {detail.screenshot.caption}
+          </figcaption>
+        </figure>
+      )}
+
       <p className="mt-7 border-t border-line pt-4 font-mono text-xs text-muted">
         {(project.roles ?? project.techStack).join(" / ")}
       </p>
-      {project.bookUrl && (
-        <a
-          href={project.bookUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="mt-4 inline-block text-sm font-semibold text-accent transition-colors hover:text-ink"
-        >
-          {ui[locale].projects.book}
-        </a>
+      {links.length > 0 && (
+        <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          {links.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target="_blank"
+              rel="noreferrer"
+              className="font-semibold text-accent transition-colors hover:text-ink"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
       )}
     </div>
   );

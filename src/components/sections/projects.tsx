@@ -26,7 +26,7 @@ function CardBody({
   project: Project;
   dict: UiDict["projects"];
   titleId?: string;
-  /** 여섯째 구획에 링크 대신 들어갈 요소. 상세가 있는 카드의 트리거 버튼입니다 */
+  /** 상세가 있는 카드의 트리거 버튼 */
   action?: ReactNode;
 }) {
   const links = [
@@ -54,23 +54,22 @@ function CardBody({
       <p className="row-start-5 mt-4 self-end font-mono text-xs text-muted">
         {(project.roles ?? project.techStack).join(" / ")}
       </p>
-      <div className="row-start-6 mt-5 flex gap-4 self-end border-t border-line pt-4 text-sm">
-        {action ??
-          (links.length > 0 ? (
-            links.map((link) => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noreferrer"
-                className="font-semibold transition-colors hover:text-accent"
-              >
-                {link.label}
-              </a>
-            ))
-          ) : (
-            <span className="text-muted">{dict.privateNote}</span>
-          ))}
+      <div className="row-start-6 mt-5 flex flex-wrap gap-x-4 gap-y-2 self-end border-t border-line pt-4 text-sm">
+        {action}
+        {links.map((link) => (
+          <a
+            key={link.label}
+            href={link.url}
+            target="_blank"
+            rel="noreferrer"
+            className="relative z-10 font-semibold transition-colors hover:text-accent"
+          >
+            {link.label}
+          </a>
+        ))}
+        {!action && links.length === 0 && (
+          <span className="text-muted">{dict.privateNote}</span>
+        )}
       </div>
     </>
   );

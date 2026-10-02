@@ -1,6 +1,81 @@
 import type { ProjectDetail } from "@/types/portfolio";
 
 export const projectDetails: Record<string, ProjectDetail> = {
+  lrage: {
+    lead: "A collaborative open-source research project for comparing legal RAG configurations. I participated as a co-first author and handled most of the implementation, including the evaluation toolkit and GUI. I later extended it with a web UI for running experiments, tracking their history, and analyzing results.",
+    sections: [
+      {
+        heading: "The problem",
+        body: [
+          "RAG results depend not only on the language model, but also on which documents are retrieved and how they are ordered. LRAGE reduces the work of reconnecting evaluation code whenever legal researchers change the corpus, retriever, reranker, language model, or evaluation criteria, letting them compare combinations within one workflow.",
+        ],
+      },
+      {
+        heading: "Evaluation pipeline design",
+        body: [
+          "Building on the model and task evaluation structure of lm-evaluation-harness, I separated retrievers and rerankers behind abstract interfaces. I integrated Pyserini and the rerankers library, connecting document retrieval, prompt construction, generation, and evaluation. The pipeline retains existing model and task support while allowing retrieval and reranking implementations to be replaced.",
+          "For generated responses, I integrated LLM-as-a-judge evaluation with per-question rubrics. Alongside aggregate scores, it records assessment explanations for individual responses. Both the CLI and GUI allow researchers to adjust model, retrieval, and evaluation settings.",
+        ],
+      },
+      {
+        heading: "Extending it into an experiment management tool",
+        body: [
+          "I later added a FastAPI backend and React web UI. Evaluations run in the background with live progress and logs, while configurations and results are retained as run history. Separate output directories and run statuses connect launching an experiment with returning to its results later.",
+          "The interface brings together each sample's retrieved documents, prompt, response, and judge explanation, with filters for incorrect answers and judge scores. A comparison view shows configurations and metrics across runs, connecting the evaluation core with experiment analysis.",
+        ],
+      },
+      {
+        heading: "Research and public artifacts",
+        body: [
+          "We applied LRAGE to legal tasks from Korean KBL, English LegalBench, and Chinese LawBench to examine how component choices affect results. Rather than generalizing an accuracy gain from one configuration, the focus was on providing a tool for testing different corpora, models, rerankers, and evaluation criteria.",
+          "We released a co-first-authored paper on arXiv, the source code, and a GUI demo. Pre-built Pile-of-law indexes and other legal retrieval resources reduce the preparation needed to run experiments.",
+        ],
+      },
+    ],
+    screenshot: {
+      src: "/projects/lrage-web-ui.png",
+      width: 1512,
+      height: 844,
+      alt: "LRAGE web UI connecting task, retriever, reranker, language model, and judge settings",
+      caption: "The web UI configures evaluation components as one pipeline. The screen uses example data.",
+    },
+  },
+  woodshed: {
+    lead: "A personal project for recording, practicing, and sharing guitar licks as TAB. I built a graphic editor that connects notation, transposition, and playback.",
+    sections: [
+      {
+        heading: "TAB editor and shared data",
+        body: [
+          "I built the graphic editor and notation from note data containing strings, frets, and articulations. ASCII TAB export, transposition, and playback share that data, so edits flow into every representation.",
+        ],
+      },
+      {
+        heading: "Transposition and playback",
+        body: [
+          "Users can transpose all notes by semitone and play synthesized guitar sounds through Web Audio, with tempo control and a moving playhead. Playback treats each column as an equal-length eighth note and represents bends, slides, and vibrato as pitch changes.",
+        ],
+      },
+      {
+        heading: "TAB image import",
+        body: [
+          "Note information read from a TAB image by a model is validated and loaded into the editor. Users review and correct the result before saving.",
+        ],
+      },
+      {
+        heading: "Records and sharing",
+        body: [
+          "Private, unlisted, and public visibility settings combine with discovery, search, comments, and collections to support storing and sharing licks. Reporting and admin review are also available, while private and hidden content is excluded from link previews.",
+        ],
+      },
+    ],
+    screenshot: {
+      src: "/projects/woodshed-editor.png",
+      width: 1280,
+      height: 844,
+      alt: "Woodshed editor for guitar strings, frets, and articulations alongside a notation preview",
+      caption: "The graphic TAB editor and notation preview.",
+    },
+  },
   "architecture-prediction-model": {
     lead: "A joint competition entry exploring how AI predictions affect human choice and space. From a CS/AI perspective, I helped frame the question, structure the feedback-loop argument, and review the narrative and presentation. My teammate primarily connected the work to architectural discourse and history and developed its visualizations.",
     sections: [
